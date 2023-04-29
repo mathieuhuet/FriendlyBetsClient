@@ -9,9 +9,10 @@ import { ScreenHeight } from '../shared';
 import { colors } from '../colors';
 
 
-const CardView = styled.View`
+const CardView = styled.TouchableOpacity`
   flex-direction: row;
   height: ${ScreenHeight * 0.2}px;
+  width: 100%;
   background-color: ${colors.primary};
   border-width: 2px;
   border-color: ${colors.secondary};
@@ -30,14 +31,14 @@ const CardSection = styled.View`
 
 `;
 
-interface InfoCardProps {
+interface BalanceCardProps {
   style?: StyleProp<TextStyle>;
   icon?: string;
   title?: string;
   value?: string;
 }
 
-const InfoCard: FunctionComponent<InfoCardProps> = (props) => {
+const BalanceCard: FunctionComponent<BalanceCardProps> = (props) => {
   return (
     <CardView {...props}>
       <CardSection style={{width: '60%'}}>
@@ -62,4 +63,4 @@ const InfoCard: FunctionComponent<InfoCardProps> = (props) => {
   );
 }
 
-export default InfoCard;
+export default BalanceCard;

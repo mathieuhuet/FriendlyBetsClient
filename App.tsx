@@ -26,7 +26,7 @@ const App: FunctionComponent = () => {
   }, [])
   return (
     <>
-      {accessToken ? <ConnectedStack/> : <NotConnectedStack/>}
+      <ConnectedStack/>
     </>
   );
 }

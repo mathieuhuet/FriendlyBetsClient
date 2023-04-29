@@ -9,4 +9,6 @@ export const colors = {
   lightGray: "#6B7280",
   success: "#22C55E",
   failure: "#EF4444",
+  purple: "#a377fb",
+  orange: "#ef835d",
 }
