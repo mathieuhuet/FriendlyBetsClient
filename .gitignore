@@ -1,6 +1,7 @@
 node_modules/
 .expo/
 dist/
+.env
 npm-debug.*
 *.jks
 *.p8
@@ -12,7 +13,6 @@ web-build/
 
 # misc
 .DS_Store
-*.env*
 
 
 # Temporary files created by Metro to check the health of the file watcher
