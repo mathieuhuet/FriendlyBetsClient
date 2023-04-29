@@ -1,0 +1,27 @@
+import React, { FunctionComponent } from 'react';
+import { StyleProp, TextStyle } from "react-native";
+// Styled components
+import styled from 'styled-components/native';
+import { colors } from '../colors';
+
+
+const StyledText = styled.Text`
+  font-size: 30px;
+  color: ${colors.tertiary};
+  text-align: left;
+`;
+
+interface LargeTextProps {
+  children: React.ReactNode;
+  textStyle?: StyleProp<TextStyle>;
+}
+
+const LargeText: FunctionComponent<LargeTextProps> = (props) => {
+  return (
+    <StyledText style={props.textStyle}>
+      { props.children }
+    </StyledText>
+  );
+}
+
+export default LargeText;
