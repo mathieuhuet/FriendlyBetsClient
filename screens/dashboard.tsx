@@ -19,7 +19,6 @@ import bottomImage from '../assets/backgrounds/bottom_background_v1.png'
 
 const TopBackGround = styled.View`
   background-color: ${colors.darkGray};
-  background-image: ${topImage};
   width: 100%;
   height: ${ScreenHeight * 0.3}px;
   border-radius: 30px;
@@ -32,7 +31,7 @@ const TopImage = styled.Image`
   height: ${ScreenHeight * 0.6}px;
   max-height: 100%;
   position: absolute;
-  top: -30px;
+  top: -10px;
 `;
 
 const BottomImage = styled.Image`
