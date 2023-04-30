@@ -1,15 +1,13 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useEffect } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
+import { getUserInfo } from '../services/userServices/getUserInfo';
 
 // Custom components
 import MainContainer from '../components/containers/mainContainer';
 import LargeText from '../components/texts/largeText';
 import BalanceCard from '../components/cards/balanceCard';
-import MakeABetCard from '../components/cards/makeABetCard';
-import JoinABetCard from '../components/cards/joinABetCard';
-import ViewYourBetCard from '../components/cards/viewYourBet';
-import MoreCard from '../components/cards/moreCard';
+import SquareCard from '../components/cards/squareCard';
 import { ScreenHeight } from '../components/shared';
 import { colors } from '../components/colors';
 
@@ -31,7 +29,6 @@ const TopImage = styled.Image`
   height: ${ScreenHeight * 0.6}px;
   max-height: 100%;
   position: absolute;
-  top: -10px;
 `;
 
 const BottomImage = styled.Image`
@@ -44,7 +41,15 @@ const BottomImage = styled.Image`
 
 
 const Dashboard: FunctionComponent = () => {
-
+  const [header, setHeader] = useState('');
+  useEffect(() => {
+    getUserInfo('test').then((result) => {
+      setHeader(result.data.firstName);
+    }).catch((err) => {
+      console.log(err);
+      setHeader('doesnt work.');
+    })
+  }, []);
 
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0}} >
@@ -53,16 +58,37 @@ const Dashboard: FunctionComponent = () => {
       <BottomImage source={bottomImage} />
       <MainContainer style={{backgroundColor: 'transparent'}}>
         <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold'}}>
-          Hello, User.
+          {header}
         </LargeText>
         <BalanceCard/>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
-          <MakeABetCard/>
-          <JoinABetCard/>
+          <SquareCard
+            style={{backgroundColor: colors.purple}}
+            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
+          >
+            Make a bet
+          </SquareCard>
+          <SquareCard
+            style={{backgroundColor: colors.orange}}
+            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
+          >
+            Join a bet
+          </SquareCard>
         </View>
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
-          <ViewYourBetCard/>
-          <MoreCard/>
+          <SquareCard
+            style={{backgroundColor: colors.accent}}
+            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
+          >
+            View bets
+          </SquareCard>
+          <SquareCard
+            style={{backgroundColor: colors.tertiary}}
+            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
+            onPress={() => console.log('Allo mathieu, tu as appuyé sur le bouton "More".')}
+          >
+            More
+          </SquareCard>
         </View>
       </MainContainer>
     </MainContainer>

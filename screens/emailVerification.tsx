@@ -1,7 +1,8 @@
 import React, { FunctionComponent, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { loginEmail, verifyUser } from '../services/authServices';
+import { loginEmail } from '../services/userServices/login';
+import { verifyUser } from '../services/userServices/verifyLoginCode';
 // Custom components
 import MainContainer from '../components/containers/mainContainer';
 import KeyboardAvoidingContainer from '../components/containers/keyboardAvoidingContainer';
@@ -55,32 +56,29 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
   }
 
   const handleEmailVerification = () => {
-    try {
-      setVerifying(true);
-      // call backend
-      verifyUser({loginCode: code, email: email}).then(data => {
-        setVerifying(false);
-        if (data.error) {
-          return showModal('failed', 'Uh oh...', data.message, 'OK');
-        } else if (!data.error) {
-          return showModal('success', 'All Good!', 'Your email has been verified.', 'Proceed');
-        }
-        return showModal('failed', 'Uh oh...', 'error', 'OK');
-      }).catch(err => {
-        return showModal('failed', 'Uh oh...', err, 'OK');
-      });
-    } catch (error) {
+    setVerifying(true);
+    // call backend
+    verifyUser({loginCode: code, email: email}).then(result => {
       setVerifying(false);
-      return showModal('failed', 'Uh oh...', error.message, 'OK');
-    }
+      if (result.data) {
+        return showModal('success', 'All Good!', 'Your email has been verified.', 'Proceed');
+      }
+    }).catch(err => {
+      setVerifying(false);
+      return showModal('failed', 'Uh oh...', err.message, 'OK');
+    });
   }
 
-  const resendEmail = async (triggerTimer: Function) => {
-    try {
-      loginEmail({email: email});
-    } catch (error) {
-      alert("Resending the email has failed: " + error.message);
-    }
+
+  const resendEmail = () => {
+    loginEmail({email: email}).then(result => {
+      if (result.data) {
+        const email = result.data;
+        navigation.navigate('EmailVerification', email);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
   return (
     <MainContainer>

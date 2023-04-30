@@ -2,7 +2,7 @@ import React, { FunctionComponent, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import { View } from 'react-native';
 import { Formik } from 'formik';
-import { registerUser } from '../services/authServices';
+import { registerUser } from '../services/userServices/register';
 // Custom components
 import MainContainer from '../components/containers/mainContainer';
 import KeyboardAvoidingContainer from '../components/containers/keyboardAvoidingContainer';
@@ -23,15 +23,16 @@ const Register: FunctionComponent = ({ navigation }) => {
     setMessage('');
     // call backend and move to next page if successful
     registerUser(credentials).then(result => {
-      const {data, error, message} = result;
-      if (error) {
-        setMessage(message);
-      } else if (!error) {
-        navigation.navigate('EmailVerification', {email: credentials.email});
+      if (result.data) {
+        const email = result.data;
+        navigation.navigate('EmailVerification', email);
       }
       setSubmitting(false);
     }).catch(err => {
-      setMessage(err);
+      if (err.message) {
+        setMessage(err.message);
+      }
+      console.log(err);
       setSubmitting(false);
     });
   }

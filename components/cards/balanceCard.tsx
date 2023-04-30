@@ -26,7 +26,7 @@ const CardView = styled.TouchableOpacity`
 `; // overflow: hidden; removes the shadow-box...
 
 const CardSection = styled.View`
-  justify-content: space-between;
+  justify-content: space-evenly;
   align-items: flex-start;
 
 `;
@@ -43,14 +43,11 @@ const BalanceCard: FunctionComponent<BalanceCardProps> = (props) => {
     <CardView {...props}>
       <CardSection style={{width: '60%'}}>
         <RegularText textStyle={{fontWeight: 'bold'}}>
-          Balance
+          You owe..
         </RegularText>
         <RegularText textStyle={{fontWeight: 'bold', fontSize: 25}}>
           $ 15.41
         </RegularText>
-        <SmallText>
-          13/04/2021
-        </SmallText>
       </CardSection>
       <CardSection style={{width: '40%'}}>
         <MaterialCommunityIcons 

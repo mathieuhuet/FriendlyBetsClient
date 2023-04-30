@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import NotConnectedStack from './navigators/notConnectedStack';
 import ConnectedStack from './navigators/connectedStack';
@@ -13,11 +13,11 @@ const getAccessToken: () => Promise<string> = async () => {
 }
 
 const App: FunctionComponent = () => {
-  let accessToken = '';
+  const [accessToken, setAccessToken] = useState('')
   useEffect(() => {
     const fetchAccessToken = async () => {
       await getAccessToken().then(data => {
-        accessToken = data;
+        setAccessToken(data);
       }).catch(err => {
         console.log(err);
       });
@@ -26,7 +26,7 @@ const App: FunctionComponent = () => {
   }, [])
   return (
     <>
-      <ConnectedStack/>
+      {accessToken ? <ConnectedStack/> : <NotConnectedStack/>}
     </>
   );
 }

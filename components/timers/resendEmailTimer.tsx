@@ -44,7 +44,7 @@ const ResendEmailTimer: FunctionComponent<ResendEmailTimerProps> = (props) => {
       <SmallText textStyle={{marginTop: 30, padding: 5}}>
         Didn't receive the email?
       </SmallText>
-      <PressableText 
+      <PressableText
         onPress={() => props.resendEmail(triggerTimer(props.targetTime))}
         disabled={!props.activeResend}
         textStyle={{opacity: !props.activeResend ? 0.6 : 1, color: colors.accent, fontWeight: 'bold', padding: 5}}
