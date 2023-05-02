@@ -1,14 +1,15 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
 import * as SecureStore from 'expo-secure-store';
-import { getUserInfo } from '../../services/userServices/getUserInfo';
 import { logoutUser } from '../../services/userServices/logout';
+import { UserContext, UserDispatchContext } from '../../context/user/userContext';
 
 
 // Custom components
 import MainContainer from '../../components/containers/mainContainer';
 import LargeText from '../../components/texts/largeText';
+import SmallText from '../../components/texts/smallText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
 
@@ -25,51 +26,23 @@ const Background = styled.Image`
 `;
 
 
-
-const getAccessToken: () => Promise<string> = async () => {
-  let result = await SecureStore.getItemAsync('accessToken');
-  if (result) {
-    return result;
-  } else {
-    return '';
-  }
-}
-
 async function saveAccessToken(value: string) {
   await SecureStore.setItemAsync('accessToken', value);
 }
 
 const More: FunctionComponent = ({navigation}) => {
-  const [accessToken, setAccessToken] = useState('')
-  const [userInfo, setUserInfo] = useState({firstName: '', lastName: '', email: ''});
-  useEffect(() => {
-    const fetchAccessToken = () => {
-      getAccessToken().then(data => {
-        setAccessToken(data);
-      }).catch(err => {
-        console.log(err, 'TEST1111');
-      }).finally(() => {
-        getUserInfo(accessToken).then((result) => {
-          console.log(result);
-          setUserInfo(result.data);
-        }).catch((err) => {
-          console.log(err, 'TEST2222');
-        })
-      });
-    }
-    fetchAccessToken();
-  }, []);
-
+  const dispatch = useContext(UserDispatchContext);
+  const user = useContext(UserContext);
 
   const logout = () => {
-    logoutUser(accessToken).then(result => {
+    logoutUser(user.accessToken).then(result => {
       if (result.data) {
         console.log('LOGOUT SUCCESSFUL MATHIEU');
         saveAccessToken('');
+        dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: ''}})
       }
     }).catch(err => {
-      console.log(err, 'test33333');
-      saveAccessToken(''); // delete this line
+      console.log(err, 'MORE LOGOUT');
     });
   }
 
@@ -80,18 +53,46 @@ const More: FunctionComponent = ({navigation}) => {
         <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.primary}}>
           More
         </LargeText>
-        <ProfileIcon
-          firstName='Mathieu'
-          lastName='Huet'
-          color='#e32e12'
-          size={10}
-          style={{backgroundColor: colors.primary}}
-        />
-        <RegularButton
-          onPress={logout}
+        <View
+          style={{display: 'flex', flexDirection: 'row'}}
         >
-          Logout
-        </RegularButton>
+          <View
+            style={{width: '50%'}}
+          >
+            <RegularButton
+              onPress={logout}
+              style={{width: '100%'}}
+            >
+              Logout
+            </RegularButton>
+          </View>
+          <View
+            style={{width: '50%'}}
+          >
+            <ProfileIcon
+              firstName='À'
+              lastName='Ø'
+              color={colors.accent}
+              size={16}
+              backgroundColor={colors.primary}
+            />
+            <SmallText
+              textStyle={{color: colors.primary}}
+            >
+              {user.firstName}
+            </SmallText>
+            <SmallText
+              textStyle={{color: colors.primary, marginBottom: 20}}
+            >
+              {user.lastName}
+            </SmallText>
+            <SmallText
+              textStyle={{color: colors.primary}}
+            >
+              {user.email}
+            </SmallText>
+          </View>
+        </View>
       </MainContainer>
     </MainContainer>
   );

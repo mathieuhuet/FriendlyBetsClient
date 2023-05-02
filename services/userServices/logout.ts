@@ -1,7 +1,7 @@
 import axios from 'axios';
-import {REACT_APP_USER_API} from '@env'
-const API = REACT_APP_USER_API
-? REACT_APP_USER_API
+import {REACT_NATIVE_USER_API} from '@env'
+const API = REACT_NATIVE_USER_API
+? REACT_NATIVE_USER_API
 : 'http://127.0.0.1:5000/user';
 
 
@@ -10,12 +10,13 @@ export const logoutUser = (accessToken:string) => {
     console.log(API);
     console.log(accessToken);
     axios.post(
-      `${API}/logout`, 
+      `${API}/logout`,
+      {data: 'no data'},
       {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
+          'Authorization': `Bearer ${accessToken}`
+        }
       }
     ).then((response) => {
       const { data } = response;

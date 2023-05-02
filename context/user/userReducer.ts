@@ -1,0 +1,45 @@
+export const initialUser = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  profileIconColor: '',
+  profileIconBackgroundColor: '',
+  profileIconPolice: '',
+  accessToken: ''
+}
+
+
+export const userReducer = (user, action) => {
+  switch (action.type) {
+    case 'SET_ACCESSTOKEN': {
+      return {
+        ...user,
+        accessToken: action.payload.accessToken
+      }
+    }
+    case 'SET_NAME': {
+      return {
+        ...user,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName
+      }
+    }
+    case 'SET_PROFILEICON': {
+      return {
+        ...user,
+        profileIconColor: action.payload.profileIconColor,
+        profileIconBackgroundColor: action.payload.profileIconBackgroundColor,
+        profileIconPolice: action.payload.profileIconPolice,
+      }
+    }
+    case 'SET_EMAIL': {
+      return {
+        ...user,
+        email: action.payload.email
+      }
+    }
+    default: {
+      throw Error('Unknown action: ' + action.type);
+    }
+  }
+}

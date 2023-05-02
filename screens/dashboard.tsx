@@ -64,15 +64,18 @@ const Dashboard: FunctionComponent = ({navigation}) => {
       getAccessToken().then(data => {
         setAccessToken(data);
       }).catch(err => {
-        console.log(err);
+        console.log(err, 'DASHBOARD 1');
       }).finally(() => {
-        getUserInfo(accessToken).then((result) => {
-          setHeader(result.data.firstName);
-          setUserInfo(result.data);
-        }).catch((err) => {
-          setHeader('doesnt work.');
-          console.log(err);
-        })
+        if (accessToken) {
+          getUserInfo(accessToken).then((result) => {
+            setHeader(result.data.firstName);
+            setUserInfo(result.data);
+          }).catch((err) => {
+            setHeader('doesnt work.');
+            console.log(err, 'DASHBOARD 2');
+            console.log(accessToken, 'accessToken, dashboard');
+          })
+        }
       });
     }
     fetchAccessToken();

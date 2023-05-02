@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { ActivityIndicator } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { loginEmail } from '../services/userServices/login';
@@ -14,14 +14,27 @@ import StyledCodeInput from '../components/inputs/styledCodeInput';
 import MessageModal from '../components/modals/messageModal';
 import { colors } from '../components/colors';
 import ConnectedStack from '../navigators/connectedStack';
+import { UserDispatchContext } from '../context/user/userContext';
 
 
 async function saveAccessToken(value: string) {
   await SecureStore.setItemAsync('accessToken', value);
 }
 
+const getAccessToken: () => Promise<string> = async () => {
+  let result = await SecureStore.getItemAsync('accessToken');
+  if (result) {
+    return result;
+  } else {
+    return '';
+  }
+}
+
 
 const EmailVerification: FunctionComponent = ({ navigation, route }) => {
+  const dispatch = useContext(UserDispatchContext);
+
+
   const email = route.params.email;
   const MAX_CONST_LENGTH = 4;
   const [code, setCode] = useState('');
@@ -31,6 +44,7 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
   // Resending email
   const [activeResend, setActiveResend] = useState(true);
 
+  // TODO changing all those useState into a single useReducer
   // Modal
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessageType, setModalMessageType] = useState('');
@@ -39,10 +53,14 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
   const [modalButtonText, setModalButtonText] = useState('');
 
 
-  const modalButtonHandler = () => {
+  const modalButtonHandler = async () => {
     setModalVisible(false);
     if (modalMessageType === 'success') {
-      return <ConnectedStack/>
+      await getAccessToken().then(data => {
+        dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: data}});
+      }).catch(err => {
+        console.log(err, 'APP 1');
+      });
     }
   }
 
@@ -60,7 +78,10 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
     verifyUser({loginCode: code, email: email}).then(result => {
       setVerifying(false);
       if (result.data) {
-        saveAccessToken(result.data.accessToken);
+        saveAccessToken(result.data.accessToken).then(() => {
+        }).catch(err => {
+          console.log(err);
+        });
         return showModal('success', 'All Good!', 'Your email has been verified.', 'Proceed');
       }
     }).catch(err => {
