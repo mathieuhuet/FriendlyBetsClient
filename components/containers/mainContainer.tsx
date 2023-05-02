@@ -13,12 +13,12 @@ const StyledView = styled.View`
   background-color: ${colors.primary};
 `;
 
-interface MainContainerProps {
+interface Props {
   children: React.ReactNode;
   style?: StyleProp<TextStyle>;
 }
 
-const MainContainer: FunctionComponent<MainContainerProps> = (props) => {
+const MainContainer: FunctionComponent<Props> = (props) => {
   return (
     <StyledView {...props}>
       { props.children }

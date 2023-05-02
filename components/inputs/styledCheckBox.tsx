@@ -15,7 +15,7 @@ const StyledView = styled.View`
 `;
 
 
-interface StyledCheckBoxProps {
+interface Props {
   children: React.ReactNode;
   name?: string;
   isChecked: boolean;
@@ -24,7 +24,7 @@ interface StyledCheckBoxProps {
   boxColor: string;
 }
 
-const StyledCheckBox: FunctionComponent<StyledCheckBoxProps> = (props) => {
+const StyledCheckBox: FunctionComponent<Props> = (props) => {
   return (
     <StyledView>
       <Checkbox

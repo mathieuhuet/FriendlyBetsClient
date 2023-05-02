@@ -11,14 +11,14 @@ const StyledPressable = styled.Pressable`
   align-self: center;
 `;
 
-interface PressableTextProps {
+interface Props {
   children: React.ReactNode;
   onPress: any;
   textStyle?: StyleProp<TextStyle>;
   disabled?: boolean;
 }
 
-const PressableText: FunctionComponent<PressableTextProps> = (props) => {
+const PressableText: FunctionComponent<Props> = (props) => {
   return (
     <>
     {props.disabled && 

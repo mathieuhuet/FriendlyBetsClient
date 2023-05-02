@@ -44,14 +44,14 @@ const CodeInputFocused = styled(CodeInput)`
 
 `;
 
-interface StyledCodeInputProps {
+interface Props {
   code: string;
   setCode: any;
   maxLength: number;
   setPinReady: any;
 }
 
-const StyledCodeInput: FunctionComponent<StyledCodeInputProps> = (props) => {
+const StyledCodeInput: FunctionComponent<Props> = (props) => {
   const [inputContainerIsFocused, setInputContainerIsFocused] = useState(false);
   const codeDigitsArray = new Array(props.maxLength).fill(0);
   const textInputRef = useRef(null);

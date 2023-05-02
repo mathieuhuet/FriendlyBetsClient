@@ -13,9 +13,10 @@ import IconHeader from '../components/icons/iconHeader';
 import StyledCodeInput from '../components/inputs/styledCodeInput';
 import MessageModal from '../components/modals/messageModal';
 import { colors } from '../components/colors';
+import ConnectedStack from '../navigators/connectedStack';
 
 
-async function save(value: string) {
+async function saveAccessToken(value: string) {
   await SecureStore.setItemAsync('accessToken', value);
 }
 
@@ -39,12 +40,10 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
 
 
   const modalButtonHandler = () => {
-    if (modalMessageType === 'success') {
-      // go to the dashboard
-
-
-    }
     setModalVisible(false);
+    if (modalMessageType === 'success') {
+      return <ConnectedStack/>
+    }
   }
 
   const showModal = (type:string, headerText:string, message:string, buttonText:string) => {
@@ -61,6 +60,7 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
     verifyUser({loginCode: code, email: email}).then(result => {
       setVerifying(false);
       if (result.data) {
+        saveAccessToken(result.data.accessToken);
         return showModal('success', 'All Good!', 'Your email has been verified.', 'Proceed');
       }
     }).catch(err => {

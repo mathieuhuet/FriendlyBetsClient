@@ -6,7 +6,8 @@ const API = REACT_APP_USER_API
 
 export const getUserInfo = (accessToken: string) => {
   return new Promise((resolve, reject) => {
-    axios.post(
+    console.log(API);
+    axios.get(
       `${API}/getUserInfo`, 
       {
         headers: {

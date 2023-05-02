@@ -6,6 +6,7 @@ const API = REACT_APP_USER_API
 
 export const verifyUser = (credentials) => {
   return new Promise((resolve, reject) => {
+    console.log(API);
     axios.post(
       `${API}/verify`, 
       credentials,
@@ -23,7 +24,7 @@ export const verifyUser = (credentials) => {
           reject(err.response.data);
         }
       } catch (error) {
-        reject(error);
+        reject(err);
       }
     })
   })

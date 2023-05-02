@@ -17,7 +17,7 @@ const ButtonView = styled.TouchableOpacity`
   align-self: center;
 `;
 
-interface RegularButtonProps {
+interface Props {
   children: React.ReactNode;
   onPress?: any;
   textStyle?: StyleProp<TextStyle>;
@@ -25,7 +25,7 @@ interface RegularButtonProps {
   disabled?: Boolean
 }
 
-const RegularButton: FunctionComponent<RegularButtonProps> = (props) => {
+const RegularButton: FunctionComponent<Props> = (props) => {
   return (
     <>
       {props.disabled &&       

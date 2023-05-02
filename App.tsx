@@ -12,6 +12,7 @@ const getAccessToken: () => Promise<string> = async () => {
   }
 }
 
+
 const App: FunctionComponent = () => {
   const [accessToken, setAccessToken] = useState('')
   useEffect(() => {

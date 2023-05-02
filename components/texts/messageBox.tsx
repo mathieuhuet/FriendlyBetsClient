@@ -11,12 +11,12 @@ const StyledText = styled.Text`
   text-align: center;
 `;
 
-interface MessageBoxProps {
+interface Props {
   children: React.ReactNode;
   textStyle?: StyleProp<TextStyle>;
 }
 
-const MessageBox: FunctionComponent<MessageBoxProps> = (props) => {
+const MessageBox: FunctionComponent<Props> = (props) => {
   return (
     <StyledText style={props.textStyle}>
       { props.children }

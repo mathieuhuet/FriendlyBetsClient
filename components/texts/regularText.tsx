@@ -11,12 +11,12 @@ const StyledText = styled.Text`
   text-align: left;
 `;
 
-interface RegularTextProps {
+interface Props {
   children: React.ReactNode;
   textStyle?: StyleProp<TextStyle>;
 }
 
-const RegularText: FunctionComponent<RegularTextProps> = (props) => {
+const RegularText: FunctionComponent<Props> = (props) => {
   return (
     <StyledText style={props.textStyle}>
       { props.children }

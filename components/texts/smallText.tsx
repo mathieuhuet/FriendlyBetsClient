@@ -11,12 +11,12 @@ const StyledText = styled.Text`
   text-align: left;
 `;
 
-interface SmallTextProps {
+interface Props {
   children: React.ReactNode;
   textStyle?: StyleProp<TextStyle>;
 }
 
-const SmallText: FunctionComponent<SmallTextProps> = (props) => {
+const SmallText: FunctionComponent<Props> = (props) => {
   return (
     <StyledText style={props.textStyle}>
       { props.children }

@@ -10,11 +10,7 @@ import PrivacyPolicy from '../screens/privacyPolicy';
 
 const Stack = createNativeStackNavigator();
 
-interface NotConnectedStackProps {
-
-}
-
-const NotConnectedStack: FunctionComponent<NotConnectedStackProps> = () => {
+const NotConnectedStack: FunctionComponent = () => {
 
   return (
     <NavigationContainer

@@ -13,6 +13,10 @@ import MessageBox from '../components/texts/messageBox';
 import RegularButton from '../components/buttons/regularButton';
 import PressableText from '../components/texts/pressableText';
 import { colors } from '../components/colors';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NotConnectedStackProps } from '../navigators/notConnectedStack';
+
+
 
 const Login: FunctionComponent = ({ navigation }) => {
   const [message, setMessage] = useState('');

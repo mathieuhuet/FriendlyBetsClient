@@ -41,7 +41,7 @@ const RightIcon = styled.TouchableOpacity`
   padding-right: 10px;
 `;
 
-interface StyledTextInputProps {
+interface Props {
   children?: React.ReactNode;
   isPassword?: boolean;
   icon?: string;
@@ -55,7 +55,7 @@ interface StyledTextInputProps {
   value?: any;
 }
 
-const StyledTextInput: FunctionComponent<StyledTextInputProps> = (props) => {
+const StyledTextInput: FunctionComponent<Props> = (props) => {
   const [inputBackgroundColor, setInputBackgroundColor] = useState(colors.primary);
   const [hidePassword, setHidePassword] = useState(true);
 

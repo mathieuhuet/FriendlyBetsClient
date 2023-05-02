@@ -30,7 +30,7 @@ const ModalView = styled.View`
   shadow-radius: 4px;
 `;
 
-interface MessageModalProps {
+interface Props {
   buttonHandler: any;
   type: string;
   headerText: string;
@@ -39,7 +39,7 @@ interface MessageModalProps {
   modalVisible: boolean;
 }
 
-const MessageModal: FunctionComponent<MessageModalProps> = (props) => {
+const MessageModal: FunctionComponent<Props> = (props) => {
   return (
     <Modal
       animationType='slide'

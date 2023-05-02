@@ -23,7 +23,7 @@ const CardView = styled.TouchableOpacity`
 
 
 
-interface SquareCardProps {
+interface Props {
   children?: React.ReactNode;
   style?: StyleProp<TextStyle>;
   text?: string;
@@ -31,7 +31,7 @@ interface SquareCardProps {
   onPress?: any;
 }
 
-const SquareCard: FunctionComponent<SquareCardProps> = (props) => {
+const SquareCard: FunctionComponent<Props> = (props) => {
   return (
     <CardView 
       style={props.style}

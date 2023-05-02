@@ -31,16 +31,19 @@ const CardSection = styled.View`
 
 `;
 
-interface BalanceCardProps {
+interface Props {
   style?: StyleProp<TextStyle>;
   icon?: string;
   title?: string;
   value?: string;
+  onPress?: any;
 }
 
-const BalanceCard: FunctionComponent<BalanceCardProps> = (props) => {
+const BalanceCard: FunctionComponent<Props> = (props) => {
   return (
-    <CardView {...props}>
+    <CardView {...props}
+      onPress={props.onPress}
+    >
       <CardSection style={{width: '60%'}}>
         <RegularText textStyle={{fontWeight: 'bold'}}>
           You owe..

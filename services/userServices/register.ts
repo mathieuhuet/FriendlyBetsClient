@@ -6,6 +6,7 @@ const API = REACT_APP_USER_API
 
 export const registerUser = (credentials) => {
   return new Promise((resolve, reject) => {
+    console.log(API);
     axios.post(
       `${API}/register`, 
       credentials,

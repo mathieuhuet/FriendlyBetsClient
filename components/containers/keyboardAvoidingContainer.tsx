@@ -2,11 +2,11 @@ import React, { FunctionComponent } from 'react';
 import { KeyboardAvoidingView, Keyboard, ScrollView, Pressable, Platform } from 'react-native';
 
 
-interface KeyboardAvoidingContainerProps {
+interface Props {
   children: React.ReactNode;
 }
 
-const KeyboardAvoidingContainer: FunctionComponent<KeyboardAvoidingContainerProps> = (props) => {
+const KeyboardAvoidingContainer: FunctionComponent<Props> = (props) => {
   return (
     <KeyboardAvoidingView
       style={{flex: 1,

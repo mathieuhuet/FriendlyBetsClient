@@ -10,28 +10,34 @@ import { ScreenHeight } from '../shared';
 const IconBackground = styled.View`
   width: ${ScreenHeight * 0.15}px;
   height: ${ScreenHeight * 0.15}px;
-  border-radius: ${ScreenHeight * 0.2}px;
+  border-radius: 50%;
   justify-content: center;
   align-items: center;
   align-self: center;
 `;
 
+const IconInitials = styled.Text`
+  font-size: 32px;
+  text-align: center;
+`;
+
 interface Props {
-  name: string;
-  color?: string;
+  firstName: string;
+  lastName?: string;
+  color: string;
+  police?: string;
+  size: number;
   style?: StyleProp<TextStyle>;
 }
 
-const IconHeader: FunctionComponent<Props> = (props) => {
+const ProfileIcon: FunctionComponent<Props> = (props) => {
   return (
     <IconBackground style={props.style}>
-      <MaterialCommunityIcons 
-        name={props.name}
-        size={ScreenHeight * 0.08}
-        color={props.color ? props.color : colors.accent}
-      />
+      <IconInitials style={{color: props.color}}>
+        {props.firstName[0]}{props.lastName ? props.lastName[0] : ''}
+      </IconInitials>
     </IconBackground>
   );
 }
 
-export default IconHeader;
+export default ProfileIcon;

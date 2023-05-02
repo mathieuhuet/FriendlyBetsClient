@@ -10,14 +10,14 @@ const StyledView = styled.View`
   align-items: center;
 `;
 
-interface ResendEmailTimerProps {
+interface Props {
   activeResend: Boolean;
   setActiveResend: any;
   resendEmail: any;
   targetTime: number;
 }
 
-const ResendEmailTimer: FunctionComponent<ResendEmailTimerProps> = (props) => {
+const ResendEmailTimer: FunctionComponent<Props> = (props) => {
   const [timeLeft, setTimeLeft] = useState(0); 
 
   let resendTimerInterval: any;
