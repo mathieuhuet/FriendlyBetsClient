@@ -1,9 +1,7 @@
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { View } from 'react-native';
 import styled from 'styled-components/native';
-import * as SecureStore from 'expo-secure-store';
-import { getUserInfo } from '../services/userServices/getUserInfo';
-import { logoutUser } from '../services/userServices/logout';
+import { UserContext, UserDispatchContext } from '../context/user/userContext';
 
 
 // Custom components
@@ -42,46 +40,9 @@ const BottomImage = styled.Image`
   bottom: -30px;
 `;
 
-const getAccessToken: () => Promise<string> = async () => {
-  let result = await SecureStore.getItemAsync('accessToken');
-  if (result) {
-    return result;
-  } else {
-    return '';
-  }
-}
-
-async function saveAccessToken(value: string) {
-  await SecureStore.setItemAsync('accessToken', value);
-}
-
 const Dashboard: FunctionComponent = ({navigation}) => {
-  const [accessToken, setAccessToken] = useState('')
-  const [userInfo, setUserInfo] = useState({firstName: '', lastName: '', email: ''});
-  const [header, setHeader] = useState('');
-  useEffect(() => {
-    const fetchAccessToken = () => {
-      getAccessToken().then(data => {
-        setAccessToken(data);
-      }).catch(err => {
-        console.log(err, 'DASHBOARD 1');
-      }).finally(() => {
-        if (accessToken) {
-          getUserInfo(accessToken).then((result) => {
-            setHeader(result.data.firstName);
-            setUserInfo(result.data);
-          }).catch((err) => {
-            setHeader('doesnt work.');
-            console.log(err, 'DASHBOARD 2');
-            console.log(accessToken, 'accessToken, dashboard');
-          })
-        }
-      });
-    }
-    fetchAccessToken();
-  }, [accessToken]);
-
-
+  const dispatch = useContext(UserDispatchContext);
+  const user = useContext(UserContext);
 
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0}} >
@@ -90,7 +51,7 @@ const Dashboard: FunctionComponent = ({navigation}) => {
       <BottomImage source={bottomImage} />
       <MainContainer style={{backgroundColor: 'transparent'}}>
         <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold'}}>
-          {header}
+          {user.firstName ? `Welcome, ${user.firstName}` : ""}
         </LargeText>
         <BalanceCard
           onPress={() => navigation.navigate('Balance')}

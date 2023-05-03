@@ -14,11 +14,12 @@ import StyledCodeInput from '../components/inputs/styledCodeInput';
 import MessageModal from '../components/modals/messageModal';
 import { colors } from '../components/colors';
 import ConnectedStack from '../navigators/connectedStack';
-import { UserDispatchContext } from '../context/user/userContext';
+import { UserContext, UserDispatchContext } from '../context/user/userContext';
 
 
 async function saveAccessToken(value: string) {
   await SecureStore.setItemAsync('accessToken', value);
+  return value;
 }
 
 const getAccessToken: () => Promise<string> = async () => {
@@ -33,6 +34,7 @@ const getAccessToken: () => Promise<string> = async () => {
 
 const EmailVerification: FunctionComponent = ({ navigation, route }) => {
   const dispatch = useContext(UserDispatchContext);
+  const user = useContext(UserContext);
 
 
   const email = route.params.email;
@@ -78,10 +80,19 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
     verifyUser({loginCode: code, email: email}).then(result => {
       setVerifying(false);
       if (result.data) {
-        saveAccessToken(result.data.accessToken).then(() => {
+        saveAccessToken(result.data.accessToken).then((accessToken) => {
+          if (accessToken) {
+            getUserInfo(accessToken).then((result) => {
+              dispatch({ type: 'SET_NAME', payload: {firstName: result.data.firstName, lastName: result.data.lastName}});
+              dispatch({ type: 'SET_EMAIL', payload: {email: result.data.email}});
+              dispatch({ type: 'SET_PROFILEICON', payload: {profileIconColor: result.data.profileIconColor, profileIconBackgroundColor: result.data.profileIconBackgroundColor, profileIconPolice: result.data.profileIconPolice}});
+            }).catch((err) => {
+              console.log(err, 'EMAIL 2');
+            })
+          }
         }).catch(err => {
           console.log(err);
-        });
+        })
         return showModal('success', 'All Good!', 'Your email has been verified.', 'Proceed');
       }
     }).catch(err => {

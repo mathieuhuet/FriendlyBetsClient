@@ -1,12 +1,12 @@
 import React, { FunctionComponent } from 'react';
 import { StyleProp, TextStyle } from "react-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 // Styled components
 import styled from 'styled-components/native';
 import RegularText from '../texts/regularText';
-import SmallText from '../texts/smallText';
 import { ScreenHeight } from '../shared';
 import { colors } from '../colors';
+import ProfileIcon from '../icons/profileIcon';
 
 
 const CardView = styled.TouchableOpacity`
@@ -53,10 +53,12 @@ const BalanceCard: FunctionComponent<Props> = (props) => {
         </RegularText>
       </CardSection>
       <CardSection style={{width: '40%'}}>
-        <MaterialCommunityIcons 
-          name="chart-arc"
-          size={ScreenHeight * 0.13}
-          color={colors.accent}
+        <ProfileIcon
+          firstName='Mathieu'
+          lastName='Huet'
+          color={colors.primary}
+          size={12}
+          backgroundColor={colors.accent}
         />
       </CardSection>
     </CardView>

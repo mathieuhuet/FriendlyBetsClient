@@ -4,6 +4,7 @@ import NotConnectedStack from './navigators/notConnectedStack';
 import ConnectedStack from './navigators/connectedStack';
 import { UserContext, UserDispatchContext } from './context/user/userContext';
 import { initialUser, userReducer } from './context/user/userReducer';
+import { getUserInfo } from './services/userServices/getUserInfo';
 
 
 const getAccessToken: () => Promise<string> = async () => {
@@ -35,6 +36,16 @@ const BeforeStack: FunctionComponent = () => {
         dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: data}});
       }).catch(err => {
         console.log(err, 'APP 1');
+      }).finally(() => {
+        if (user.accessToken) {
+          getUserInfo(user.accessToken).then((result) => {
+            dispatch({ type: 'SET_NAME', payload: {firstName: result.data.firstName, lastName: result.data.lastName}});
+            dispatch({ type: 'SET_EMAIL', payload: {email: result.data.email}});
+            dispatch({ type: 'SET_PROFILEICON', payload: {profileIconColor: result.data.profileIconColor, profileIconBackgroundColor: result.data.profileIconBackgroundColor, profileIconPolice: result.data.profileIconPolice}});
+          }).catch((err) => {
+            console.log(err, 'APP 2');
+          })
+        }
       });
     }
     fetchAccessToken();

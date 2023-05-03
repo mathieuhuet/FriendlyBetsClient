@@ -43,6 +43,7 @@ const More: FunctionComponent = ({navigation}) => {
       }
     }).catch(err => {
       console.log(err, 'MORE LOGOUT');
+      saveAccessToken('');
     });
   }
 
