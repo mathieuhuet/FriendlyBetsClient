@@ -41,7 +41,6 @@ const BottomImage = styled.Image`
 `;
 
 const Dashboard: FunctionComponent = ({navigation}) => {
-  const dispatch = useContext(UserDispatchContext);
   const user = useContext(UserContext);
 
   return (
@@ -55,6 +54,12 @@ const Dashboard: FunctionComponent = ({navigation}) => {
         </LargeText>
         <BalanceCard
           onPress={() => navigation.navigate('Balance')}
+          firstName={user.firstName}
+          lastName={user.lastName}
+          color={user.profileIconColor}
+          size={11}
+          backgroundColor={user.profileIconBackgroundColor}
+          police={user.profileIconPolice}
         />
         <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
           <SquareCard

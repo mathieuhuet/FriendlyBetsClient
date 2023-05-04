@@ -3,6 +3,7 @@ import { ActivityIndicator } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { loginEmail } from '../services/userServices/login';
 import { verifyUser } from '../services/userServices/verifyLoginCode';
+import { getUserInfo } from '../services/userServices/getUserInfo';
 // Custom components
 import MainContainer from '../components/containers/mainContainer';
 import KeyboardAvoidingContainer from '../components/containers/keyboardAvoidingContainer';
@@ -34,7 +35,6 @@ const getAccessToken: () => Promise<string> = async () => {
 
 const EmailVerification: FunctionComponent = ({ navigation, route }) => {
   const dispatch = useContext(UserDispatchContext);
-  const user = useContext(UserContext);
 
 
   const email = route.params.email;
@@ -83,9 +83,15 @@ const EmailVerification: FunctionComponent = ({ navigation, route }) => {
         saveAccessToken(result.data.accessToken).then((accessToken) => {
           if (accessToken) {
             getUserInfo(accessToken).then((result) => {
-              dispatch({ type: 'SET_NAME', payload: {firstName: result.data.firstName, lastName: result.data.lastName}});
-              dispatch({ type: 'SET_EMAIL', payload: {email: result.data.email}});
-              dispatch({ type: 'SET_PROFILEICON', payload: {profileIconColor: result.data.profileIconColor, profileIconBackgroundColor: result.data.profileIconBackgroundColor, profileIconPolice: result.data.profileIconPolice}});
+              dispatch({ type: 'SET_CREDENTIALS', 
+              payload: {
+                firstName: result.data.firstName, 
+                lastName: result.data.lastName,
+                email: result.data.email,
+                profileIconColor: result.data.profileIconColor, 
+                profileIconBackgroundColor: result.data.profileIconBackgroundColor, 
+                profileIconPolice: result.data.profileIconPolice
+              }});
             }).catch((err) => {
               console.log(err, 'EMAIL 2');
             })

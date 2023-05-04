@@ -1,9 +1,7 @@
 import React, { FunctionComponent } from 'react';
-import { StyleProp, TextStyle } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 // Styled components
 import styled from 'styled-components/native';
-import { colors } from '../colors';
+import { getProfileColorCode } from '../profileColors';
 import { ScreenHeight } from '../shared';
 
 
@@ -18,6 +16,7 @@ const IconBackground = styled.View`
 
 const IconInitials = styled.Text`
   font-size: ${ScreenHeight * 0.05}px;
+  font-weight: bold;
   text-align: center;
 `;
 
@@ -30,16 +29,19 @@ interface Props {
   size: number;
 }
 
+
 const ProfileIcon: FunctionComponent<Props> = (props) => {
   const circleSize = ScreenHeight * (props.size / 100);
-  const fontSize = ScreenHeight * (props.size / 200);
+  const fontSize = ScreenHeight * (props.size / 220);
   return (
-    <IconBackground style={{backgroundColor: props.backgroundColor, width: circleSize, height: circleSize}}>
-      <IconInitials style={{color: props.color, fontSize: fontSize}}>
+    <IconBackground style={{backgroundColor: `${getProfileColorCode(props.backgroundColor)}`, width: circleSize, height: circleSize}}>
+      <IconInitials style={{color: `${getProfileColorCode(props.color)}`, fontSize: fontSize}}>
         {props.firstName[0]}{props.lastName ? props.lastName[0] : ''}
       </IconInitials>
     </IconBackground>
   );
 }
+
+
 
 export default ProfileIcon;

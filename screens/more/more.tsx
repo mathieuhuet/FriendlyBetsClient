@@ -17,6 +17,8 @@ import { colors } from '../../components/colors';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import ProfileIcon from '../../components/icons/profileIcon';
 import RegularButton from '../../components/buttons/regularButton';
+import RegularText from '../../components/texts/regularText';
+import PressableText from '../../components/texts/pressableText';
 
 const Background = styled.Image`
   width: 100%;
@@ -37,7 +39,6 @@ const More: FunctionComponent = ({navigation}) => {
   const logout = () => {
     logoutUser(user.accessToken).then(result => {
       if (result.data) {
-        console.log('LOGOUT SUCCESSFUL MATHIEU');
         saveAccessToken('');
         dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: ''}})
       }
@@ -55,44 +56,74 @@ const More: FunctionComponent = ({navigation}) => {
           More
         </LargeText>
         <View
-          style={{display: 'flex', flexDirection: 'row'}}
+          style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '30%'}}
         >
           <View
-            style={{width: '50%'}}
-          >
-            <RegularButton
-              onPress={logout}
-              style={{width: '100%'}}
-            >
-              Logout
-            </RegularButton>
-          </View>
-          <View
-            style={{width: '50%'}}
+            style={{width: '40%'}}
           >
             <ProfileIcon
-              firstName='À'
-              lastName='Ø'
-              color={colors.accent}
+              firstName={user.firstName}
+              lastName={user.lastName}
+              color={user.profileIconColor}
               size={16}
-              backgroundColor={colors.primary}
+              backgroundColor={user.profileIconBackgroundColor}
+              police={user.profileIconPolice}
             />
+            <PressableText
+              textStyle={{marginTop: 10, color: colors.primary}}
+              onPress={() => navigation.navigate('ChangeIcon')}
+            >
+              Modify Icon
+            </PressableText>
+          </View>
+          <View
+            style={{width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}
+          >
             <SmallText
               textStyle={{color: colors.primary}}
+            >
+              First name:
+            </SmallText>
+            <RegularText
+              textStyle={{color: colors.primary}}
+              style={{borderWidth: 1, borderColor: colors.primary, borderRadius: 4, height: 40, paddingLeft: 3, display: 'flex', justifyContent: 'center'}}
             >
               {user.firstName}
-            </SmallText>
-            <SmallText
-              textStyle={{color: colors.primary, marginBottom: 20}}
-            >
-              {user.lastName}
-            </SmallText>
+            </RegularText>
             <SmallText
               textStyle={{color: colors.primary}}
             >
-              {user.email}
+              Last name:
             </SmallText>
+            <RegularText
+              textStyle={{color: colors.primary}}
+              style={{borderWidth: 1, borderColor: colors.primary, borderRadius: 4, height: 40, paddingLeft: 3, display: 'flex', justifyContent: 'center'}}
+            >
+              {user.lastName}
+            </RegularText>
           </View>
+        </View>
+        <View
+          style={{display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '50%'}}
+        >
+          <RegularButton
+            onPress={() => navigation.navigate('ChangeName')}
+            style={{marginBottom: 10, backgroundColor: colors.orange}}
+          >
+            Change Name
+          </RegularButton>
+          <RegularButton
+            onPress={() => navigation.navigate('ChangeEmail')}
+            style={{marginBottom: 10, backgroundColor: colors.orange}}
+          >
+            Change Email
+          </RegularButton>
+          <RegularButton
+            onPress={logout}
+            style={{marginBottom: 10, backgroundColor: colors.orange}}
+          >
+            Logout
+          </RegularButton>
         </View>
       </MainContainer>
     </MainContainer>

@@ -53,6 +53,8 @@ interface Props {
   onBlur?: any;
   onFocus?: any;
   value?: any;
+  labelStyle?: StyleProp<TextStyle>;
+  iconColor?: string;
 }
 
 const StyledTextInput: FunctionComponent<Props> = (props) => {
@@ -75,10 +77,12 @@ const StyledTextInput: FunctionComponent<Props> = (props) => {
         <MaterialCommunityIcons 
           name={props.icon ? props.icon : "doubleright"} 
           size={30} 
-          color={colors.accent} 
+          color={props.iconColor ? props.iconColor : colors.accent} 
         />
       </LeftIcon>
-      <SmallText>
+      <SmallText
+        textStyle={props.labelStyle}
+      >
         {props.label}
       </SmallText>
       <InputField

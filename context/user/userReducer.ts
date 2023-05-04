@@ -38,6 +38,17 @@ export const userReducer = (user, action) => {
         email: action.payload.email
       }
     }
+    case 'SET_CREDENTIALS': {
+      return {
+        ...user,
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        profileIconColor: action.payload.profileIconColor,
+        profileIconBackgroundColor: action.payload.profileIconBackgroundColor,
+        profileIconPolice: action.payload.profileIconPolice,
+        email: action.payload.email
+      }
+    }
     default: {
       throw Error('Unknown action: ' + action.type);
     }

@@ -37,6 +37,12 @@ interface Props {
   title?: string;
   value?: string;
   onPress?: any;
+  firstName: string;
+  lastName?: string;
+  color: string;
+  backgroundColor: string;
+  police?: string;
+  size: number;
 }
 
 const BalanceCard: FunctionComponent<Props> = (props) => {
@@ -54,11 +60,12 @@ const BalanceCard: FunctionComponent<Props> = (props) => {
       </CardSection>
       <CardSection style={{width: '40%'}}>
         <ProfileIcon
-          firstName='Mathieu'
-          lastName='Huet'
-          color={colors.primary}
-          size={12}
-          backgroundColor={colors.accent}
+          firstName={props.firstName}
+          lastName={props.lastName}
+          color={props.color}
+          size={props.size}
+          backgroundColor={props.backgroundColor}
+          police={props.police}
         />
       </CardSection>
     </CardView>
