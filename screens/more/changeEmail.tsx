@@ -12,11 +12,11 @@ import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
 import StyledTextInput from '../../components/inputs/styledTextInputs';
 import MessageBox from '../../components/texts/messageBox';
-
-// Background
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
+import RegularText from '../../components/texts/regularText';
+import { changeEmail } from '../../services/userServices/changeEmail';
 
 
 const Background = styled.Image`
@@ -36,7 +36,17 @@ const ChangeEmail: FunctionComponent = ({navigation}) => {
   const handleChangeEmail = async (credentials, setSubmitting) => {
     setMessage('');
     // call backend and move to next page if successful
-
+    changeEmail(credentials, user.accessToken).then(result => {
+      setSubmitting(false);
+      if (result.data) {
+        const email = result.data.newEmail;
+        navigation.navigate('ChangeEmailVerification', email);
+      }
+    }).catch(err => {
+      console.log(err);
+      setSubmitting(false);
+      setMessage(err.message);
+    });
   }
 
   return (
@@ -45,29 +55,39 @@ const ChangeEmail: FunctionComponent = ({navigation}) => {
       <KeyboardAvoidingContainer>
         <MainContainer style={{backgroundColor: 'transparent'}}>
           <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.primary}}>
-            Change Name
+            Change Email
           </LargeText>  
           <Formik
-            initialValues={{firstName: "", lastName: "", email: "", privacyPolicy: false}}
+            initialValues={{email: "", confirmEmail: ""}}
             onSubmit={(values, {setSubmitting}) => {
-              if (values.firstName === "") {
+              if (values.email === '' || values.confirmEmail === '') {
                 setMessage('Please fill all the required fields.');
+              } else if (values.email !== values.confirmEmail) {
+                setMessage("Email and Confirm email aren't identical.");
+                setSubmitting(false);
+              } else if (values.email === user.email) {
+                setMessage('The email you entered must be different from your current email address.');
                 setSubmitting(false);
               } else {
-                handleChangeEmail({firstName: values.firstName, lastName: values.lastName}, setSubmitting);
+                handleChangeEmail({newEmail: values.email}, setSubmitting);
               }
             }}
           >
             {({handleChange, handleBlur, handleSubmit, values, isSubmitting, setFieldValue}) => (
               <>
+                <RegularText
+                  textStyle={{color: colors.primary, marginBottom: 20}}
+                >
+                  Your current email: {user.email}
+                </RegularText>
                 <StyledTextInput
                   label="Email"
                   icon="email-variant"
-                  keyboardType="default"
-                  placeholder={user.email}
-                  onChangeText={handleChange('firstName')}
-                  onBlur={handleBlur('firstName')}
-                  value={values.firstName}
+                  keyboardType="email-address"
+                  placeholder=''
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={values.email}
                   inputFieldStyle={{ marginBottom: 10 }}
                   iconColor={colors.tertiary}
                   labelStyle={{color: colors.primary}}
@@ -75,11 +95,11 @@ const ChangeEmail: FunctionComponent = ({navigation}) => {
                 <StyledTextInput
                   label="Confirm email"
                   icon="email-variant"
-                  keyboardType="default"
+                  keyboardType="email-address"
                   placeholder=''
-                  onChangeText={handleChange('lastName')}
-                  onBlur={handleBlur('lastName')}
-                  value={values.lastName}
+                  onChangeText={handleChange('confirmEmail')}
+                  onBlur={handleBlur('confirmEmail')}
+                  value={values.confirmEmail}
                   inputFieldStyle={{ marginBottom: 10 }}
                   iconColor={colors.tertiary}
                   labelStyle={{color: colors.primary}}
@@ -89,7 +109,9 @@ const ChangeEmail: FunctionComponent = ({navigation}) => {
                 >
                   { message || ' ' }
                 </MessageBox>
-                {isSubmitting && <RegularButton>
+                {isSubmitting && <RegularButton
+                  style={{marginBottom: 10, backgroundColor: colors.orange}}
+                >
                   <ActivityIndicator
                     size="small"
                     color={colors.primary}

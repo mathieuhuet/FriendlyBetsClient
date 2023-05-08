@@ -70,14 +70,14 @@ const More: FunctionComponent = ({navigation}) => {
               police={user.profileIconPolice}
             />
             <PressableText
-              textStyle={{marginTop: 10, color: colors.primary}}
+              textStyle={{marginTop: 10, color: colors.primary, fontSize: 16, textDecorationLine: 'underline'}}
               onPress={() => navigation.navigate('ChangeIcon')}
             >
               Modify Icon
             </PressableText>
           </View>
           <View
-            style={{width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'space-evenly'}}
+            style={{width: '55%', display: 'flex', flexDirection: 'column', justifyContent: 'center'}}
           >
             <SmallText
               textStyle={{color: colors.primary}}
@@ -86,7 +86,7 @@ const More: FunctionComponent = ({navigation}) => {
             </SmallText>
             <RegularText
               textStyle={{color: colors.primary}}
-              style={{borderWidth: 1, borderColor: colors.primary, borderRadius: 4, height: 40, paddingLeft: 3, display: 'flex', justifyContent: 'center'}}
+              style={{borderWidth: 1, borderColor: colors.primary, borderRadius: 4, height: 40, paddingLeft: 3, display: 'flex', justifyContent: 'center', marginBottom: 10}}
             >
               {user.firstName}
             </RegularText>
@@ -123,6 +123,12 @@ const More: FunctionComponent = ({navigation}) => {
             style={{marginBottom: 10, backgroundColor: colors.orange}}
           >
             Logout
+          </RegularButton>
+          <RegularButton
+            onPress={() => navigation.navigate('DeleteAccount')}
+            style={{marginBottom: 10, backgroundColor: colors.orange}}
+          >
+            Delete Account
           </RegularButton>
         </View>
       </MainContainer>

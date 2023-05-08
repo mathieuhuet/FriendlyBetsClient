@@ -9,8 +9,10 @@ import JoinABet from '../screens/joinABet/joinABet';
 import ViewBets from '../screens/viewBets/viewBets';
 import More from '../screens/more/more';
 import ChangeEmail from '../screens/more/changeEmail';
+import ChangeEmailVerification from '../screens/more/changeEmailVerification';
 import ChangeIcon from '../screens/more/changeIcon';
 import ChangeName from '../screens/more/changeName';
+import DeleteAccount from '../screens/more/deleteAccount';
 
 
 const Stack = createNativeStackNavigator();
@@ -52,12 +54,20 @@ const ConnectedStack: FunctionComponent = (props) => {
           component={ChangeIcon}
         />
         <Stack.Screen
+          name="ChangeEmailVerification"
+          component={ChangeEmailVerification}
+        />
+        <Stack.Screen
           name='ChangeEmail'
           component={ChangeEmail}
         />
         <Stack.Screen
           name='ChangeName'
           component={ChangeName}
+        />
+        <Stack.Screen
+          name='DeleteAccount'
+          component={DeleteAccount}
         />
       </Stack.Navigator>
     </NavigationContainer>

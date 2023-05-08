@@ -7,6 +7,7 @@ export const profileColors = {
   lightGreen: "#9ed885",
   purple: "#a377fb",
   orange: "#ef835d",
+  white: '#ffffff'
 }
 
 export const getProfileColorCode = (color: string): string => {
@@ -34,6 +35,9 @@ export const getProfileColorCode = (color: string): string => {
     }
     case 'orange' : {
       return "#ef835d"
+    }
+    case 'white' : {
+      return "#ffffff"
     }
     default : {
       return "#fde6bb"

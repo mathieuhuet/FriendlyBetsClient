@@ -7,6 +7,7 @@ import { initialUser, userReducer } from './context/user/userReducer';
 import { getUserInfo } from './services/userServices/getUserInfo';
 
 
+
 const getAccessToken: () => Promise<string> = async () => {
   let result = await SecureStore.getItemAsync('accessToken');
   if (result) {

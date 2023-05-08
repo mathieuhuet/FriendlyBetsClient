@@ -3,6 +3,7 @@ import styled from 'styled-components/native';
 import { UserContext, UserDispatchContext } from '../../context/user/userContext';
 import { Formik } from 'formik';
 import { ActivityIndicator } from 'react-native';
+import { changeName } from '../../services/userServices/changeName';
 
 
 // Custom components
@@ -12,7 +13,7 @@ import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
 import StyledTextInput from '../../components/inputs/styledTextInputs';
 import MessageBox from '../../components/texts/messageBox';
-
+import MessageModal from '../../components/modals/messageModal';
 // Background
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
@@ -32,10 +33,45 @@ const ChangeName: FunctionComponent = ({navigation}) => {
   const user = useContext(UserContext);
   const [message, setMessage] = useState('');
 
+  // TODO changing all those useState into a single useReducer
+  // Modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessageType, setModalMessageType] = useState('');
+  const [modalHeaderText, setModalHeaderText] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalButtonText, setModalButtonText] = useState('');
+
+  const modalButtonHandler = async () => {
+    setModalVisible(false);
+    if (modalMessageType === 'success') {
+      navigation.navigate('More');
+    }
+  }
+
+  const showModal = (type:string, headerText:string, message:string, buttonText:string) => {
+    setModalMessageType(type);
+    setModalHeaderText(headerText);
+    setModalMessage(message);
+    setModalButtonText(buttonText);
+    setModalVisible(true);
+  }
+
   const handleChangeName = async (credentials, setSubmitting) => {
     setMessage('');
     // call backend and move to next page if successful
-
+    changeName(credentials, user.accessToken).then(result => {
+      if (result.data) {
+        dispatch({ type: 'SET_NAME', payload: {firstName: result.data.firstName, lastName: result.data.lastName}});
+        return showModal('success', 'All Good!', 'Your name has been updated.', 'Proceed');
+      }
+      setSubmitting(false);
+    }).catch(err => {
+      if (err.message) {
+        setMessage(err.message);
+      }
+      console.log(err);
+      setSubmitting(false);
+    });
   }
 
   return (
@@ -47,7 +83,7 @@ const ChangeName: FunctionComponent = ({navigation}) => {
             Change Name
           </LargeText>  
           <Formik
-            initialValues={{firstName: "", lastName: "", email: "", privacyPolicy: false}}
+            initialValues={{firstName: "", lastName: ""}}
             onSubmit={(values, {setSubmitting}) => {
               if (values.firstName === "") {
                 setMessage('Please fill all the required fields.');
@@ -63,7 +99,7 @@ const ChangeName: FunctionComponent = ({navigation}) => {
                   label="First name"
                   icon="account"
                   keyboardType="default"
-                  placeholder={user.firstName}
+                  placeholder=''
                   onChangeText={handleChange('firstName')}
                   onBlur={handleBlur('firstName')}
                   value={values.firstName}
@@ -75,7 +111,7 @@ const ChangeName: FunctionComponent = ({navigation}) => {
                   label="Last name (optional)"
                   icon="account"
                   keyboardType="default"
-                  placeholder={user.lastName}
+                  placeholder=''
                   onChangeText={handleChange('lastName')}
                   onBlur={handleBlur('lastName')}
                   value={values.lastName}
@@ -88,7 +124,9 @@ const ChangeName: FunctionComponent = ({navigation}) => {
                 >
                   { message || ' ' }
                 </MessageBox>
-                {isSubmitting && <RegularButton>
+                {isSubmitting && <RegularButton
+                  style={{marginBottom: 10, backgroundColor: colors.orange}}
+                >
                   <ActivityIndicator
                     size="small"
                     color={colors.primary}
@@ -103,6 +141,14 @@ const ChangeName: FunctionComponent = ({navigation}) => {
               </>
             )}
           </Formik>
+          <MessageModal
+            headerText={modalHeaderText}
+            message={modalMessage}
+            modalVisible={modalVisible}
+            type={modalMessageType}
+            buttonText={modalButtonText}
+            buttonHandler={modalButtonHandler}
+          />
         </MainContainer>
       </KeyboardAvoidingContainer>
     </MainContainer>
