@@ -1,22 +1,22 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { UserContext, UserDispatchContext } from '../../context/user/userContext';
+import { View } from 'react-native';
 import { Formik } from 'formik';
 import { ActivityIndicator } from 'react-native';
 
 
 // Custom components
 import MainContainer from '../../components/containers/mainContainer';
+import TextInput from '../../components/inputs/textInput';
 import LargeText from '../../components/texts/largeText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
-import StyledTextInput from '../../components/inputs/styledTextInputs';
 import MessageBox from '../../components/texts/messageBox';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
 import RegularText from '../../components/texts/regularText';
-import { makeABet } from '../../services/betServices/makeABet';
+
 
 
 const Background = styled.Image`
@@ -29,24 +29,14 @@ const Background = styled.Image`
 
 
 const MakeABet: FunctionComponent = ({navigation}) => {
-  const dispatch = useContext(UserDispatchContext);
-  const user = useContext(UserContext);
   const [message, setMessage] = useState('');
 
   const handleNewBet = async (values, setSubmitting) => {
     setMessage('');
     // call backend and move to next page if successful
-    makeABet(values, user.accessToken).then(result => {
-      setSubmitting(false);
-      if (result.data) {
-        const email = result.data.newEmail;
-        navigation.navigate('ChangeEmailVerification', email);
-      }
-    }).catch(err => {
-      console.log(err);
-      setSubmitting(false);
-      setMessage(err.message);
-    });
+    navigation.navigate('MakeABetDate', values);
+    setSubmitting(false);
+
   }
 
   return (
@@ -54,11 +44,8 @@ const MakeABet: FunctionComponent = ({navigation}) => {
       <Background source={background} />
       <KeyboardAvoidingContainer>
         <MainContainer style={{backgroundColor: 'transparent'}}>
-          <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.tertiary}}>
-            Make a bet!
-          </LargeText>  
           <Formik
-            initialValues={{createdAt: '', bettingEndAt: '', betResolvedAt: '', betTitle: '', betExtraText: ''}}
+            initialValues={{betTitle: '', betExtraText: ''}}
             onSubmit={(values, {setSubmitting}) => {
               if (values.betTitle === '') {
                 setMessage('Please fill all the required fields.');
@@ -69,54 +56,40 @@ const MakeABet: FunctionComponent = ({navigation}) => {
             }}
           >
             {({handleChange, handleBlur, handleSubmit, values, isSubmitting, setFieldValue}) => (
-              <>
-                <StyledTextInput
-                  label="Bet Title"
-                  icon="default"
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%'
+                }}
+              >
+                <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, margin: 20}}>
+                  What's the bet?
+                </LargeText>  
+                <RegularText>
+                  Title
+                </RegularText>
+                <TextInput
                   keyboardType="default"
-                  placeholder='Bet Title'
+                  placeholder=''
                   onChangeText={handleChange('betTitle')}
                   onBlur={handleBlur('betTitle')}
                   value={values.betTitle}
-                  inputFieldStyle={{ marginBottom: 10 }}
-                  iconColor={colors.tertiary}
-                  labelStyle={{color: colors.primary}}
+                  inputFieldStyle={{ marginBottom: 10, fontSize: 20, fontWeight: 'bold', height: 80 }}
+                  multiline={true}
                 />
-                <StyledTextInput
-                  label="Bet ExtraText"
-                  icon="text"
+                <RegularText>
+                  Description (optional)
+                </RegularText>
+                <TextInput
                   keyboardType="default"
                   placeholder=''
                   onChangeText={handleChange('betExtraText')}
                   onBlur={handleBlur('betExtraText')}
                   value={values.betExtraText}
-                  inputFieldStyle={{ marginBottom: 10 }}
-                  iconColor={colors.tertiary}
-                  labelStyle={{color: colors.primary}}
-                />
-                <StyledTextInput
-                  label="Betting End At"
-                  icon="email-variant"
-                  keyboardType="default"
-                  placeholder=''
-                  onChangeText={handleChange('bettingEndAt')}
-                  onBlur={handleBlur('bettingEndAT')}
-                  value={values.bettingEndAt}
-                  inputFieldStyle={{ marginBottom: 10 }}
-                  iconColor={colors.tertiary}
-                  labelStyle={{color: colors.primary}}
-                />
-                <StyledTextInput
-                  label="Bet Resolved At"
-                  icon="email-variant"
-                  keyboardType="default"
-                  placeholder=''
-                  onChangeText={handleChange('betResolvedAt')}
-                  onBlur={handleBlur('betResolvedAt')}
-                  value={values.betResolvedAt}
-                  inputFieldStyle={{ marginBottom: 10 }}
-                  iconColor={colors.tertiary}
-                  labelStyle={{color: colors.primary}}
+                  inputFieldStyle={{ marginBottom: 10, height: 120 }}
+                  multiline={true}
                 />
                 <MessageBox
                   textStyle={{ marginBottom: 20, marginTop: 20 }}
@@ -134,11 +107,11 @@ const MakeABet: FunctionComponent = ({navigation}) => {
                 {!isSubmitting && <RegularButton
                   onPress={handleSubmit}
                   style={{marginBottom: 10, backgroundColor: colors.primary}}
-                  textStyle={{color: colors.purple}}
+                  textStyle={{color: colors.purple, fontSize: 20}}
                 >
-                  Bet on
+                  Next
                 </RegularButton>}
-              </>
+              </View>
             )}
           </Formik>
         </MainContainer>

@@ -52,10 +52,10 @@ const BalanceCard: FunctionComponent<Props> = (props) => {
     >
       <CardSection style={{width: '60%'}}>
         <RegularText textStyle={{fontWeight: 'bold'}}>
-          You owe..
+          You're even!
         </RegularText>
         <RegularText textStyle={{fontWeight: 'bold', fontSize: 25}}>
-          $ 15.41
+          $ 0
         </RegularText>
       </CardSection>
       <CardSection style={{width: '40%'}}>
