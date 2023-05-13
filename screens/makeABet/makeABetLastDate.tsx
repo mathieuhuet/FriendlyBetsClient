@@ -1,11 +1,9 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
-import { UserContext, UserDispatchContext } from '../../context/user/userContext';
 import { Formik } from 'formik';
 import { ActivityIndicator } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Platform } from 'react-native';
 import { Button, Text } from 'react-native';
 
 
@@ -31,11 +29,11 @@ const Background = styled.Image`
 
 
 
-const MakeABetDate: FunctionComponent = ({navigation, route}) => {
-  const dispatch = useContext(UserDispatchContext);
-  const user = useContext(UserContext);
+const MakeABetLastDate: FunctionComponent = ({navigation, route}) => {
   const [message, setMessage] = useState('');
   const betText = route.params;
+  const [date, setDate] = useState(new Date(1598051730000));
+
 
   const handleNewBet = async (values, setSubmitting) => {
     setMessage('');
@@ -51,7 +49,6 @@ const MakeABetDate: FunctionComponent = ({navigation, route}) => {
       setMessage(err.message);
     });
   }
-  const [date, setDate] = useState(new Date(1598051730000));
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -140,4 +137,4 @@ const MakeABetDate: FunctionComponent = ({navigation, route}) => {
   );
 }
 
-export default MakeABetDate;
+export default MakeABetLastDate;

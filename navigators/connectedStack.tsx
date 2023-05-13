@@ -5,7 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Dashboard from '../screens/dashboard';
 import Balance from '../screens/balance/balance';
 import MakeABet from '../screens/makeABet/makeABet';
-import MakeABetDate from '../screens/makeABet/makeABetDate';
+import MakeABetResolvedDate from '../screens/makeABet/makeABetResolvedDate';
+import MakeABetLastDate from '../screens/makeABet/makeABetLastDate';
 import JoinABet from '../screens/joinABet/joinABet';
 import ViewBets from '../screens/viewBets/viewBets';
 import More from '../screens/more/more';
@@ -35,8 +36,12 @@ const ConnectedStack: FunctionComponent = (props) => {
           component={Balance}
         />
         <Stack.Screen
-          name='MakeABetDate'
-          component={MakeABetDate}
+          name='MakeABetResolvedDate'
+          component={MakeABetResolvedDate}
+        />
+        <Stack.Screen
+          name='MakeABetLastDate'
+          component={MakeABetLastDate}
         />
         <Stack.Screen
           name='MakeABet'

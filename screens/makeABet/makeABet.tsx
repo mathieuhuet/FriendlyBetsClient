@@ -34,7 +34,7 @@ const MakeABet: FunctionComponent = ({navigation}) => {
   const handleNewBet = async (values, setSubmitting) => {
     setMessage('');
     // call backend and move to next page if successful
-    navigation.navigate('MakeABetDate', values);
+    navigation.navigate('MakeABetResolvedDate', values);
     setSubmitting(false);
 
   }
