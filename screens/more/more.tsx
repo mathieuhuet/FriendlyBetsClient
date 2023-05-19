@@ -12,8 +12,6 @@ import LargeText from '../../components/texts/largeText';
 import SmallText from '../../components/texts/smallText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
-
-// Background
 import background from '../../assets/backgrounds/card_background_v1.png';
 import ProfileIcon from '../../components/icons/profileIcon';
 import RegularButton from '../../components/buttons/regularButton';
@@ -70,7 +68,7 @@ const More: FunctionComponent = ({navigation}) => {
               police={user.profileIconPolice}
             />
             <PressableText
-              textStyle={{marginTop: 10, color: colors.primary, fontSize: 16, textDecorationLine: 'underline'}}
+              textStyle={{marginTop: 10, color: colors.primary, fontSize: 18, textDecorationLine: 'underline'}}
               onPress={() => navigation.navigate('ChangeIcon')}
             >
               Modify Icon
@@ -109,24 +107,28 @@ const More: FunctionComponent = ({navigation}) => {
           <RegularButton
             onPress={() => navigation.navigate('ChangeName')}
             style={{marginBottom: 10, backgroundColor: colors.orange}}
+            textStyle={{fontSize: 20}}
           >
             Change Name
           </RegularButton>
           <RegularButton
             onPress={() => navigation.navigate('ChangeEmail')}
             style={{marginBottom: 10, backgroundColor: colors.orange}}
+            textStyle={{fontSize: 20}}
           >
             Change Email
           </RegularButton>
           <RegularButton
             onPress={logout}
             style={{marginBottom: 10, backgroundColor: colors.orange}}
+            textStyle={{fontSize: 20}}
           >
             Logout
           </RegularButton>
           <RegularButton
             onPress={() => navigation.navigate('DeleteAccount')}
             style={{marginBottom: 10, backgroundColor: colors.orange}}
+            textStyle={{fontSize: 20}}
           >
             Delete Account
           </RegularButton>

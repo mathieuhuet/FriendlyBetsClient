@@ -1,0 +1,37 @@
+import React, { FunctionComponent } from 'react';
+import { StyleProp, ViewStyle } from "react-native";
+
+// Styled components
+import styled from 'styled-components/native';
+import { colors } from '../colors';
+
+
+
+const ShadowView = styled.TouchableOpacity`
+  background-color: ${colors.primary};
+  color: ${colors.tertiary};
+  shadow-color: ${colors.black};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 4px;
+`;
+
+
+interface Props {
+  children?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+  onPress?: any;
+}
+
+const StyledView: FunctionComponent<Props> = (props) => {
+  return (
+    <ShadowView
+      style={props.style}
+      onPress={props.onPress}
+    >
+      {props.children}
+    </ShadowView>
+  );
+}
+
+export default StyledView;

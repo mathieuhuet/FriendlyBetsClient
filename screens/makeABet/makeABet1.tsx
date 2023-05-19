@@ -28,13 +28,13 @@ const Background = styled.Image`
 
 
 
-const MakeABet: FunctionComponent = ({navigation}) => {
+const MakeABet1: FunctionComponent = ({navigation}) => {
   const [message, setMessage] = useState('');
 
   const handleNewBet = async (values, setSubmitting) => {
     setMessage('');
     // call backend and move to next page if successful
-    navigation.navigate('MakeABetResolvedDate', values);
+    navigation.navigate('MakeABet2', values);
     setSubmitting(false);
 
   }
@@ -64,10 +64,12 @@ const MakeABet: FunctionComponent = ({navigation}) => {
                   width: '100%'
                 }}
               >
-                <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, margin: 20}}>
+                <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, fontSize: 40, marginBottom: 20}}>
                   What's the bet?
                 </LargeText>  
-                <RegularText>
+                <RegularText
+                  textStyle={{right: '40%', fontSize: 20, fontWeight: 700}}
+                >
                   Title
                 </RegularText>
                 <TextInput
@@ -76,10 +78,12 @@ const MakeABet: FunctionComponent = ({navigation}) => {
                   onChangeText={handleChange('betTitle')}
                   onBlur={handleBlur('betTitle')}
                   value={values.betTitle}
-                  inputFieldStyle={{ marginBottom: 10, fontSize: 20, fontWeight: 'bold', height: 80 }}
+                  inputFieldStyle={{ marginBottom: 10, fontSize: 20, fontWeight: 'bold', height: 80, borderWidth: 0 }}
                   multiline={true}
                 />
-                <RegularText>
+                <RegularText
+                  textStyle={{right: '20%', fontWeight: 600}}
+                >
                   Description (optional)
                 </RegularText>
                 <TextInput
@@ -88,7 +92,7 @@ const MakeABet: FunctionComponent = ({navigation}) => {
                   onChangeText={handleChange('betExtraText')}
                   onBlur={handleBlur('betExtraText')}
                   value={values.betExtraText}
-                  inputFieldStyle={{ marginBottom: 10, height: 120 }}
+                  inputFieldStyle={{ marginBottom: 10, height: 120, borderWidth: 0 }}
                   multiline={true}
                 />
                 <MessageBox
@@ -104,10 +108,20 @@ const MakeABet: FunctionComponent = ({navigation}) => {
                     color={colors.primary}
                   />
                 </RegularButton>}
-                {!isSubmitting && <RegularButton
+                {!isSubmitting &&
+                values.betTitle &&
+                <RegularButton
+                  onPress={handleSubmit}
+                  style={{marginBottom: 10, backgroundColor: colors.accent}}
+                  textStyle={{color: colors.primary, fontSize: 20, fontWeight: 700}}
+                >
+                  Next
+                </RegularButton>}
+                {!values.betTitle &&<RegularButton
                   onPress={handleSubmit}
                   style={{marginBottom: 10, backgroundColor: colors.primary}}
                   textStyle={{color: colors.purple, fontSize: 20}}
+                  disabled={true}
                 >
                   Next
                 </RegularButton>}
@@ -120,4 +134,4 @@ const MakeABet: FunctionComponent = ({navigation}) => {
   );
 }
 
-export default MakeABet;
+export default MakeABet1;

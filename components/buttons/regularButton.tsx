@@ -6,7 +6,22 @@ import { colors } from '../colors';
 import RegularText from '../texts/regularText';
 
 
-const ButtonView = styled.TouchableOpacity`
+const ButtonViewEnabled = styled.TouchableOpacity`
+  padding: 15px;
+  background-color: ${colors.accent};
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  height: 60px;
+  align-self: center;
+  shadow-color: ${colors.black};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 4px;
+`;
+
+const ButtonViewDisabled = styled.TouchableOpacity`
   padding: 15px;
   background-color: ${colors.accent};
   width: 100%;
@@ -29,21 +44,21 @@ const RegularButton: FunctionComponent<Props> = (props) => {
   return (
     <>
       {props.disabled &&       
-      <ButtonView style={props.style}>
+      <ButtonViewDisabled style={props.style}>
         <RegularText
           textStyle={[{color: colors.primary}, props.textStyle]}
         >
           {props.children}
         </RegularText>
-      </ButtonView>}
+      </ButtonViewDisabled>}
       {!props.disabled && 
-      <ButtonView style={props.style} onPress={props.onPress}>
+      <ButtonViewEnabled style={props.style} onPress={props.onPress}>
         <RegularText
           textStyle={[{color: colors.primary}, props.textStyle]}
         >
           {props.children}
         </RegularText>
-      </ButtonView>}
+      </ButtonViewEnabled>}
     </>
   );
 }

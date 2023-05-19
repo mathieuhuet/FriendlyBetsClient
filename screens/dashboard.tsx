@@ -1,7 +1,7 @@
-import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { View } from 'react-native';
+import React, { FunctionComponent, useContext } from 'react';
+import { View, ActivityIndicator } from 'react-native';
 import styled from 'styled-components/native';
-import { UserContext, UserDispatchContext } from '../context/user/userContext';
+import { UserContext } from '../context/user/userContext';
 
 
 // Custom components
@@ -11,8 +11,6 @@ import BalanceCard from '../components/cards/balanceCard';
 import SquareCard from '../components/cards/squareCard';
 import { ScreenHeight } from '../components/shared';
 import { colors } from '../components/colors';
-
-// Background
 import topImage from '../assets/backgrounds/top_background_v1.png';
 import bottomImage from '../assets/backgrounds/bottom_background_v1.png'
 
@@ -48,52 +46,59 @@ const Dashboard: FunctionComponent = ({navigation}) => {
       <TopImage source={topImage} />
       <TopBackGround/>
       <BottomImage source={bottomImage} />
-      <MainContainer style={{backgroundColor: 'transparent'}}>
-        <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold'}}>
-          {user.firstName ? `Welcome, ${user.firstName}` : ""}
-        </LargeText>
-        <BalanceCard
-          onPress={() => navigation.navigate('Balance')}
-          firstName={user.firstName}
-          lastName={user.lastName}
-          color={user.profileIconColor}
-          size={11}
-          backgroundColor={user.profileIconBackgroundColor}
-          police={user.profileIconPolice}
+      {user.firstName ?
+        <MainContainer style={{backgroundColor: 'transparent'}}>
+          <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold'}}>
+            {`Welcome, ${user.firstName}`}
+          </LargeText>
+          <BalanceCard
+            onPress={() => navigation.navigate('Balance')}
+            firstName={user.firstName}
+            lastName={user.lastName}
+            color={user.profileIconColor}
+            size={11}
+            backgroundColor={user.profileIconBackgroundColor}
+            police={user.profileIconPolice}
+          />
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+            <SquareCard
+              style={{backgroundColor: colors.purple}}
+              textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
+              onPress={() => navigation.navigate('MakeABet1')}
+            >
+              Make a bet
+            </SquareCard>
+            <SquareCard
+              style={{backgroundColor: colors.orange}}
+              textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
+              onPress={() => navigation.navigate('JoinABet')}
+            >
+              Join a bet
+            </SquareCard>
+          </View>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+            <SquareCard
+              style={{backgroundColor: colors.accent}}
+              textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
+              onPress={() => navigation.navigate('ViewBets')}
+            >
+              View bets
+            </SquareCard>
+            <SquareCard
+              style={{backgroundColor: colors.tertiary}}
+              textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
+              onPress={() => navigation.navigate('More')}
+            >
+              More
+            </SquareCard>
+          </View>
+        </MainContainer>  
+        :
+        <ActivityIndicator
+          size='large'
+          color={colors.tertiary}
         />
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
-          <SquareCard
-            style={{backgroundColor: colors.purple}}
-            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
-            onPress={() => navigation.navigate('MakeABet')}
-          >
-            Make a bet
-          </SquareCard>
-          <SquareCard
-            style={{backgroundColor: colors.orange}}
-            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
-            onPress={() => navigation.navigate('JoinABet')}
-          >
-            Join a bet
-          </SquareCard>
-        </View>
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
-          <SquareCard
-            style={{backgroundColor: colors.accent}}
-            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
-            onPress={() => navigation.navigate('ViewBets')}
-          >
-            View bets
-          </SquareCard>
-          <SquareCard
-            style={{backgroundColor: colors.tertiary}}
-            textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
-            onPress={() => navigation.navigate('More')}
-          >
-            More
-          </SquareCard>
-        </View>
-      </MainContainer>
+      }
     </MainContainer>
   );
 }

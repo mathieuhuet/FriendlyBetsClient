@@ -12,14 +12,14 @@ import RegularButton from '../../components/buttons/regularButton';
 import LargeText from '../../components/texts/largeText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
-import IconHeader from '../../components/icons/iconHeader';
 import BetCodeInput from '../../components/inputs/betCodeInput';
-import { verifyBetCode } from '../../services/betServices/verifyBetCode';
+import { joinABet } from '../../services/betServices/joinABet'
 import MessageModal from '../../components/modals/messageModal';
-import { UserDispatchContext, UserContext } from '../../context/user/userContext';
+import { UserContext } from '../../context/user/userContext';
 
 // Background
 import background from '../../assets/backgrounds/card_background_v1.png'
+import StyledView from '../../components/views/styledView';
 
 
 const Background = styled.Image`
@@ -30,15 +30,11 @@ const Background = styled.Image`
 `;
 
 const JoinABet: FunctionComponent = ({navigation}) => {
-  const dispatch = useContext(UserDispatchContext);
   const user = useContext(UserContext);
   const MAX_CONST_LENGTH = 6;
   const [code, setCode] = useState('');
   const [pinReady, setPinReady] = useState(false);
   const [verifying, setVerifying] = useState(false);
-
-  // Resending email
-  const [activeResend, setActiveResend] = useState(true);
 
   // TODO changing all those useState into a single useReducer
   // Modal
@@ -51,7 +47,7 @@ const JoinABet: FunctionComponent = ({navigation}) => {
   const modalButtonHandler = async () => {
     setModalVisible(false);
     if (modalMessageType === 'success') {
-      navigation.navigate('More');
+      navigation.navigate('Dashboard');
     }
   }
 
@@ -63,20 +59,19 @@ const JoinABet: FunctionComponent = ({navigation}) => {
     setModalVisible(true);
   }
 
-  const handleEmailVerification = () => {
-    setVerifying(true);
-    // call backend
-    verifyBetCode({newEmail: email, code: code}, user.accessToken).then(result => {
+  const handleJoinBet = async () => {
+    try {
+      setVerifying(true);
+      const result = await joinABet({betCode: code}, user.accessToken);
       setVerifying(false);
       if (result.data) {
-        const email = result.data.newEmail;
-
-        return showModal('success', 'All Good!', 'Your email has been changed.', 'Proceed');
+        return showModal('success', 'All Good!', result.message, 'Proceed');
       }
-    }).catch(err => {
+      return showModal('failed', 'Uh oh...', result.message, 'OK');
+    } catch (error) {
       setVerifying(false);
-      return showModal('failed', 'Uh oh...', err.message, 'OK');
-    });
+      return showModal('failed', 'Uh oh...', error.message, 'OK');
+    }
   }
 
 
@@ -86,21 +81,26 @@ const JoinABet: FunctionComponent = ({navigation}) => {
       <MainContainer style={{backgroundColor: 'transparent'}}>
       <KeyboardAvoidingContainer>
         <LargeText
-          textStyle={{marginTop: 20, textAlign: 'center', color: colors.primary}}
+          textStyle={{fontWeight: 'bold', color: colors.primary, marginTop: 20, fontSize: 40, marginBottom: 20, textAlign: 'center'}}
         >
-          Join a Bet.
+          Join a Bet!
         </LargeText>
         <RegularText 
         textStyle={{marginTop: 20, textAlign: 'center', color: colors.primary}}
         >
           Enter the code for the bet you wanna join.
         </RegularText>
-        <BetCodeInput 
-          maxLength={MAX_CONST_LENGTH}
-          code={code}
-          setCode={setCode}
-          setPinReady={setPinReady}
-        />
+        <StyledView
+          style={{backgroundColor: colors.tertiary, borderRadius: 10, marginVertical: 20, paddingHorizontal: 10}}
+        >
+          <BetCodeInput 
+            maxLength={MAX_CONST_LENGTH}
+            code={code}
+            setCode={setCode}
+            setPinReady={setPinReady}
+            textStyle={{color: colors.primary}}
+          />
+        </StyledView>
 
         {verifying && <RegularButton>
           <ActivityIndicator
@@ -109,7 +109,7 @@ const JoinABet: FunctionComponent = ({navigation}) => {
           />
         </RegularButton>}
         {!verifying && pinReady && <RegularButton
-          onPress={handleEmailVerification}
+          onPress={handleJoinBet}
           style={{backgroundColor: colors.primary}}
           textStyle={{color: colors.tertiary , fontSize: 20}}
         >

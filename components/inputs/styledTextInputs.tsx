@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { StyleProp, TextStyle, View } from "react-native";
+import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // Styled components
@@ -55,6 +55,7 @@ interface Props {
   value?: any;
   labelStyle?: StyleProp<TextStyle>;
   iconColor?: string;
+  style?: StyleProp<ViewStyle>;
 }
 
 const StyledTextInput: FunctionComponent<Props> = (props) => {
@@ -72,7 +73,9 @@ const StyledTextInput: FunctionComponent<Props> = (props) => {
   }
 
   return (
-    <View>
+    <View
+      style={props.style}
+    >
       <LeftIcon>
         <MaterialCommunityIcons 
           name={props.icon ? props.icon : "doubleright"} 

@@ -1,31 +1,25 @@
 import axios from 'axios';
-const API = process.env.REACT_NATIVE_USER_API
-? process.env.REACT_NATIVE_USER_API
+const API = process.env.REACT_NATIVE_BET_API
+? process.env.REACT_NATIVE_BET_API
 : 'http://127.0.0.1:5000/bet';
 
-export const makeABet = (data, accessToken: string) => {
-  return new Promise((resolve, reject) => {
-    console.log(API);
-    axios.post(
-      `${API}/makeABet`, 
-      data,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`
+export const makeABet = (sendData, accessToken: string) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const response = await axios.post(
+        `${API}/makeABet`, 
+        sendData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`
+          }
         }
-      }
-    ).then((response) => {
-        const { data } = response;
-        resolve(data);
-    }).catch(err => {
-      try {
-        if (err.response.data.error) {
-          reject(err.response.data);
-        }
-      } catch (error) {
-        reject(err);
-      }
-    })
+      )
+      const { data } = response;
+      resolve(data);
+    } catch (error) {
+      reject(error)
+    }
   })
 }

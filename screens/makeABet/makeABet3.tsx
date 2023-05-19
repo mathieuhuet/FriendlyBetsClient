@@ -1,10 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
-import { Formik } from 'formik';
-import { ActivityIndicator } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Button, Text } from 'react-native';
 
 
 // Custom components
@@ -16,8 +13,8 @@ import MessageBox from '../../components/texts/messageBox';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
-import RegularText from '../../components/texts/regularText';
-import { makeABet } from '../../services/betServices/makeABet';
+import StyledView from '../../components/views/styledView';
+
 
 
 const Background = styled.Image`
@@ -29,17 +26,19 @@ const Background = styled.Image`
 
 
 
-const MakeABetResolvedDate: FunctionComponent = ({navigation, route}) => {
+const MakeABet3: FunctionComponent = ({navigation, route}) => {
   const [message, setMessage] = useState('');
-  const betText = route.params;
-  const [date, setDate] = useState(new Date());
+  const betData = route.params;
+  const [date, setDate] = useState(new Date(betData.betResolvedAt));
 
 
   const handleNewBet = () => {
     setMessage('');
-    if (true) {
-      const bet = {...betText, resolvedDate: date}
-      navigation.navigate('MakeABetLastDate', bet);
+    if (new Date () > date) {
+      setMessage('Invalid date, bet cannot happen in the past.');
+    } else {
+      const bet = {...betData, betResolvedAt: Date.parse(date)}
+      navigation.navigate('MakeABet4', bet);
     }
   }
 
@@ -61,40 +60,35 @@ const MakeABetResolvedDate: FunctionComponent = ({navigation, route}) => {
               width: '100%'
             }}
           >
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 20}}>
-              Which date will this bet be resolved?
+
+            <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
+              OK, we will know the outcome of the bet on
+            </LargeText>  
+            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, textAlign: 'left', width: '100%'}}>
+              {date.toDateString()}
             </LargeText>  
 
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={'date'}
-                display='inline'
-                onChange={onChange}
-                minimumDate={new Date()}
-                accentColor={colors.primary}
-              />
-            
+
             <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 20}}>
               At what time?
             </LargeText>  
 
-            <View
-              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 5, borderRadius: 5}}
+            <StyledView
+              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width:'80%'}}
             >
               <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
+                display='spinner'
                 mode={'time'}
                 is24Hour={true}
                 onChange={onChange}
-                style={{alignSelf: 'center'}}
+                style={{alignSelf: 'center', width: '80%'}}
               />
-            </View>
-
+            </StyledView>
 
             <MessageBox
-              textStyle={{ marginBottom: 20, marginTop: 20 }}
+              textStyle={{ marginBottom: 20}}
             >
               { message || ' ' }
             </MessageBox>
@@ -112,4 +106,4 @@ const MakeABetResolvedDate: FunctionComponent = ({navigation, route}) => {
   );
 }
 
-export default MakeABetResolvedDate;
+export default MakeABet3;

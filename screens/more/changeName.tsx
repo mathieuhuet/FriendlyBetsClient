@@ -14,7 +14,6 @@ import { colors } from '../../components/colors';
 import StyledTextInput from '../../components/inputs/styledTextInputs';
 import MessageBox from '../../components/texts/messageBox';
 import MessageModal from '../../components/modals/messageModal';
-// Background
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
@@ -83,7 +82,7 @@ const ChangeName: FunctionComponent = ({navigation}) => {
             Change Name
           </LargeText>  
           <Formik
-            initialValues={{firstName: "", lastName: ""}}
+            initialValues={{firstName: user.firstName, lastName: user.lastName}}
             onSubmit={(values, {setSubmitting}) => {
               if (values.firstName === "") {
                 setMessage('Please fill all the required fields.');

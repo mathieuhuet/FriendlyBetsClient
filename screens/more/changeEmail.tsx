@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { UserContext, UserDispatchContext } from '../../context/user/userContext';
+import { UserContext } from '../../context/user/userContext';
 import { Formik } from 'formik';
 import { ActivityIndicator } from 'react-native';
 
@@ -29,7 +29,6 @@ const Background = styled.Image`
 
 
 const ChangeEmail: FunctionComponent = ({navigation}) => {
-  const dispatch = useContext(UserDispatchContext);
   const user = useContext(UserContext);
   const [message, setMessage] = useState('');
 

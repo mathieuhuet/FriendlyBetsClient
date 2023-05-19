@@ -3,7 +3,6 @@ import RenderHTML from 'react-native-render-html';
 import { SafeAreaView } from 'react-native';
 import { ScreenWidth } from '../components/shared';
 import styled from 'styled-components/native';
-import { colors } from '../components/colors';
 
 
 const PrivacyPolicy: FunctionComponent = () => {

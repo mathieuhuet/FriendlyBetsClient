@@ -12,20 +12,13 @@ import MainContainer from '../../components/containers/mainContainer';
 import LargeText from '../../components/texts/largeText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
-import background from '../../assets/backgrounds/card_background_v1.png';
+
 import ProfileIcon from '../../components/icons/profileIcon';
-import RegularButton from '../../components/buttons/regularButton';
 import { changeIcon } from '../../services/userServices/changeIcon';
 import MessageModal from '../../components/modals/messageModal';
 import RegularText from '../../components/texts/regularText';
 import IconButton from '../../components/buttons/iconButton';
 
-const Background = styled.Image`
-  width: 100%;
-  height: ${ScreenHeight * 0.6}px;
-  position: absolute;
-  bottom: -1px;
-`;
 
 
 
@@ -78,7 +71,6 @@ const ChangeIcon: FunctionComponent = ({navigation}) => {
 
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.tertiary}} >
-      <Background source={background} />
       <MainContainer style={{backgroundColor: 'transparent'}}>
         <Formik
           initialValues={{

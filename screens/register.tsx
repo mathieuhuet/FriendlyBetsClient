@@ -89,7 +89,7 @@ const Register: FunctionComponent = ({ navigation }) => {
               />
               <StyledCheckBox
                 isChecked={values.privacyPolicy}
-                setChecked={setFieldValue}
+                setChecked={() => setFieldValue('privacyPolicy', !values.privacyPolicy)}
                 name={'privacyPolicy'}
                 boxColor={boxColor}
               >

@@ -4,11 +4,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Screens
 import Dashboard from '../screens/dashboard';
 import Balance from '../screens/balance/balance';
-import MakeABet from '../screens/makeABet/makeABet';
-import MakeABetResolvedDate from '../screens/makeABet/makeABetResolvedDate';
-import MakeABetLastDate from '../screens/makeABet/makeABetLastDate';
+import MakeABet1 from '../screens/makeABet/makeABet1';
+import MakeABet2 from '../screens/makeABet/makeABet2';
+import MakeABet3 from '../screens/makeABet/makeABet3';
+import MakeABet4 from '../screens/makeABet/makeABet4';
+import MakeABet5 from '../screens/makeABet/makeABet5';
+import MakeABet6 from '../screens/makeABet/makeABet6';
 import JoinABet from '../screens/joinABet/joinABet';
 import ViewBets from '../screens/viewBets/viewBets';
+import BetDetails from '../screens/viewBets/betDetails';
 import More from '../screens/more/more';
 import ChangeEmail from '../screens/more/changeEmail';
 import ChangeEmailVerification from '../screens/more/changeEmailVerification';
@@ -36,16 +40,28 @@ const ConnectedStack: FunctionComponent = (props) => {
           component={Balance}
         />
         <Stack.Screen
-          name='MakeABetResolvedDate'
-          component={MakeABetResolvedDate}
+          name='MakeABet1'
+          component={MakeABet1}
         />
         <Stack.Screen
-          name='MakeABetLastDate'
-          component={MakeABetLastDate}
+          name='MakeABet2'
+          component={MakeABet2}
         />
         <Stack.Screen
-          name='MakeABet'
-          component={MakeABet}
+          name='MakeABet3'
+          component={MakeABet3}
+        />
+        <Stack.Screen
+          name='MakeABet4'
+          component={MakeABet4}
+        />
+        <Stack.Screen
+          name='MakeABet5'
+          component={MakeABet5}
+        />
+        <Stack.Screen 
+          name='MakeABet6'
+          component={MakeABet6}
         />
         <Stack.Screen
           name='JoinABet'
@@ -54,6 +70,10 @@ const ConnectedStack: FunctionComponent = (props) => {
         <Stack.Screen
           name='ViewBets'
           component={ViewBets}
+        />
+        <Stack.Screen
+          name='BetDetails'
+          component={BetDetails}
         />
         <Stack.Screen
           name='More'

@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { StyleProp, TextStyle, View } from "react-native";
+import { StyleProp, TextStyle, View, ViewStyle } from "react-native";
 
 // Styled components
 import styled from 'styled-components/native';
@@ -18,6 +18,10 @@ const InputField = styled.TextInput`
   color: ${colors.tertiary};
   border-color: ${colors.secondary};
   border-width: 2px;
+  shadow-color: ${colors.black};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.25;
+  shadow-radius: 4px;
 `;
 
 
@@ -30,6 +34,7 @@ interface Props {
   onBlur?: any;
   onFocus?: any;
   value?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 const TextInput: FunctionComponent<Props> = (props) => {
@@ -47,7 +52,7 @@ const TextInput: FunctionComponent<Props> = (props) => {
 
   return (
     <View
-      style={{width: '100%'}}
+      style={[{width: '100%'}, props.style]}
     >
       <InputField
         keyboardType={props.keyboardType}

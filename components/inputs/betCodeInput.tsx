@@ -48,6 +48,7 @@ interface Props {
   setCode: any;
   maxLength: number;
   setPinReady: any;
+  textStyle?: any;
 }
 
 const BetCodeInput: FunctionComponent<Props> = (props) => {
@@ -77,7 +78,9 @@ const BetCodeInput: FunctionComponent<Props> = (props) => {
     const StyledCodeInput = inputContainerIsFocused && isDigitFocused ? CodeInputFocused : CodeInput;
     return (
       <StyledCodeInput key={index}>
-        <CodeInputText>{digit}</CodeInputText>
+        <CodeInputText
+          style={props.textStyle}
+        >{digit}</CodeInputText>
       </StyledCodeInput>
     )
   }

@@ -30,7 +30,7 @@ const StyledCheckBox: FunctionComponent<Props> = (props) => {
       <Checkbox
         style={{margin: 8}}
         value={props.isChecked}
-        onValueChange={() => props.setChecked(props.name, !props.isChecked)}
+        onValueChange={props.setChecked}
         color={props.isChecked ? colors.accent : props.boxColor}
       />
       {props.children}

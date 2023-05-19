@@ -14,8 +14,7 @@ import IconHeader from '../components/icons/iconHeader';
 import StyledCodeInput from '../components/inputs/styledCodeInput';
 import MessageModal from '../components/modals/messageModal';
 import { colors } from '../components/colors';
-import ConnectedStack from '../navigators/connectedStack';
-import { UserContext, UserDispatchContext } from '../context/user/userContext';
+import { UserDispatchContext } from '../context/user/userContext';
 
 
 async function saveAccessToken(value: string) {
