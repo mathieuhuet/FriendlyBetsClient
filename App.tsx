@@ -40,7 +40,8 @@ const App: FunctionComponent = () => {
             email: result.data.email,
             profileIconColor: result.data.profileIconColor, 
             profileIconBackgroundColor: result.data.profileIconBackgroundColor, 
-            profileIconPolice: result.data.profileIconPolice
+            profileIconPolice: result.data.profileIconPolice,
+            _id: result.data._id
           }});
         }).catch((err) => {
           console.log(err, 'APP 2');

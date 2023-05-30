@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useContext } from 'react';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import { UserContext } from '../context/user/userContext';
 
@@ -13,6 +13,7 @@ import { ScreenHeight } from '../components/shared';
 import { colors } from '../components/colors';
 import topImage from '../assets/backgrounds/top_background_v1.png';
 import bottomImage from '../assets/backgrounds/bottom_background_v1.png'
+import ProfileIcon from '../components/icons/profileIcon';
 
 const TopBackGround = styled.View`
   background-color: ${colors.darkGray};
@@ -46,21 +47,30 @@ const Dashboard: FunctionComponent = ({navigation}) => {
       <TopImage source={topImage} />
       <TopBackGround/>
       <BottomImage source={bottomImage} />
-      {user.firstName ?
-        <MainContainer style={{backgroundColor: 'transparent'}}>
-          <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold'}}>
-            {`Welcome, ${user.firstName}`}
-          </LargeText>
-          <BalanceCard
-            onPress={() => navigation.navigate('Balance')}
-            firstName={user.firstName}
-            lastName={user.lastName}
-            color={user.profileIconColor}
-            size={11}
-            backgroundColor={user.profileIconBackgroundColor}
-            police={user.profileIconPolice}
-          />
-          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 20}}>
+        {user.firstName ? 
+          <MainContainer style={{backgroundColor: 'transparent'}}>
+          <Pressable
+            onPress={() => navigation.navigate('More')}
+            style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}
+          >
+            <View>
+              <LargeText>
+                {user.firstName}
+              </LargeText>
+              <LargeText>
+                {user.lastName}
+              </LargeText>
+            </View>
+            <ProfileIcon
+              firstName={user.firstName}
+              lastName={user.lastName}
+              color={user.profileIconColor}
+              size={12}
+              backgroundColor={user.profileIconBackgroundColor}
+              police={user.profileIconPolice}
+            />
+          </Pressable>
+          <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 120}}>
             <SquareCard
               style={{backgroundColor: colors.purple}}
               textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.tertiary}}
@@ -87,18 +97,20 @@ const Dashboard: FunctionComponent = ({navigation}) => {
             <SquareCard
               style={{backgroundColor: colors.tertiary}}
               textStyle={{fontWeight: 'bold', fontSize: 32, color: colors.primary}}
-              onPress={() => navigation.navigate('More')}
+              onPress={() => navigation.navigate('Balance')}
             >
-              More
+              Result
             </SquareCard>
           </View>
-        </MainContainer>  
+        </MainContainer>
         :
-        <ActivityIndicator
-          size='large'
-          color={colors.tertiary}
-        />
-      }
+        <MainContainer style={{backgroundColor: 'transparent', display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator
+              size='large'
+              color={colors.tertiary}
+          />
+        </MainContainer>  
+        }
     </MainContainer>
   );
 }

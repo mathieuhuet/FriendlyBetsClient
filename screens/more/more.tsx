@@ -38,7 +38,17 @@ const More: FunctionComponent = ({navigation}) => {
     logoutUser(user.accessToken).then(result => {
       if (result.data) {
         saveAccessToken('');
-        dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: ''}})
+        dispatch({ type: 'SET_CREDENTIALS', 
+        payload: {
+          firstName: '', 
+          lastName: '',
+          email: '',
+          profileIconColor: '', 
+          profileIconBackgroundColor: '', 
+          profileIconPolice: '',
+          _id: ''
+        }});
+        dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: ''}});
       }
     }).catch(err => {
       console.log(err, 'MORE LOGOUT');

@@ -3,11 +3,12 @@ const API = process.env.REACT_APP_BET_API
 ? process.env.REACT_APP_BET_API
 : 'http://127.0.0.1:5000/bet';
 
-export const joinABet = (sendData, accessToken: string) => {
+export const quitBet = (sendData, accessToken: string) => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log(API);
       const response = await axios.post(
-        `${API}/joinABet`, 
+        `${API}/quitBet`, 
         sendData,
         {
           headers: {

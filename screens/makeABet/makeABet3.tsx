@@ -3,7 +3,6 @@ import styled from 'styled-components/native';
 import { View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-
 // Custom components
 import MainContainer from '../../components/containers/mainContainer';
 import LargeText from '../../components/texts/largeText';
@@ -13,8 +12,9 @@ import MessageBox from '../../components/texts/messageBox';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
+import RegularText from '../../components/texts/regularText';
+import StyledCheckBox from '../../components/inputs/styledCheckBox';
 import StyledView from '../../components/views/styledView';
-
 
 
 const Background = styled.Image`
@@ -28,14 +28,18 @@ const Background = styled.Image`
 
 const MakeABet3: FunctionComponent = ({navigation, route}) => {
   const [message, setMessage] = useState('');
+  const [check, setCheck]= useState(false);
   const betData = route.params;
-  const [date, setDate] = useState(new Date(betData.betResolvedAt));
+  const [date, setDate] = useState(new Date());
 
 
   const handleNewBet = () => {
     setMessage('');
-    if (new Date () > date) {
-      setMessage('Invalid date, bet cannot happen in the past.');
+    if (check) {
+      const bet = {...betData, betResolvedAt: ''}
+      navigation.navigate('MakeABet5', bet);
+    } else if (!date) {
+      setMessage('Date invalid');
     } else {
       const bet = {...betData, betResolvedAt: Date.parse(date)}
       navigation.navigate('MakeABet4', bet);
@@ -46,7 +50,7 @@ const MakeABet3: FunctionComponent = ({navigation, route}) => {
     const currentDate = selectedDate;
     setDate(currentDate);
   };
-
+  
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
       <Background source={background} />
@@ -60,35 +64,37 @@ const MakeABet3: FunctionComponent = ({navigation, route}) => {
               width: '100%'
             }}
           >
-
-            <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
-              OK, we will know the outcome of the bet on
-            </LargeText>  
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, textAlign: 'left', width: '100%'}}>
-              {date.toDateString()}
+            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 10}}>
+              When will this bet be resolved?
             </LargeText>  
 
-
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 20}}>
-              At what time?
-            </LargeText>  
+            <StyledCheckBox
+              isChecked={check}
+              setChecked={() => setCheck(!check)}
+              name={'selfDateResolving'}
+              boxColor={colors.primary}
+            >
+              <RegularText textStyle={{textAlign: 'left', fontWeight: 'bold', fontSize: 20}}>
+                I will decide when the bet is resolved.
+              </RegularText>
+            </StyledCheckBox>
 
             <StyledView
-              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width:'80%'}}
+              style={{backgroundColor: colors.tertiary, marginTop: 10}}
             >
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                display='spinner'
-                mode={'time'}
-                is24Hour={true}
-                onChange={onChange}
-                style={{alignSelf: 'center', width: '80%'}}
-              />
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={'date'}
+              display='inline'
+              onChange={onChange}
+              minimumDate={new Date()}
+              disabled={check}
+            />
             </StyledView>
 
             <MessageBox
-              textStyle={{ marginBottom: 20}}
+              textStyle={{ marginBottom: 20 }}
             >
               { message || ' ' }
             </MessageBox>

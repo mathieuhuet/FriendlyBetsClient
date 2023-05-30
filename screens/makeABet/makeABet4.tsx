@@ -13,7 +13,6 @@ import MessageBox from '../../components/texts/messageBox';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
-import RegularText from '../../components/texts/regularText';
 import StyledView from '../../components/views/styledView';
 
 
@@ -29,23 +28,16 @@ const Background = styled.Image`
 
 const MakeABet4: FunctionComponent = ({navigation, route}) => {
   const [message, setMessage] = useState('');
-  const [resolvedDate, setResolvedDate] = useState(null);
   const betData = route.params;
-  const [date, setDate] = useState(new Date());
-
-  useEffect(() => {
-    if (betData.betResolvedAt) {
-      setResolvedDate(new Date(betData.betResolvedAt));
-    }
-  }, [betData])
+  const [date, setDate] = useState(new Date(betData.betResolvedAt));
 
 
   const handleNewBet = () => {
     setMessage('');
-    if (!date) {
-      setMessage('Date invalid');
+    if (new Date () > date) {
+      setMessage('Invalid date, bet cannot happen in the past.');
     } else {
-      const bet = {...betData, bettingEndAt: Date.parse(date)}
+      const bet = {...betData, betResolvedAt: Date.parse(date)}
       navigation.navigate('MakeABet5', bet);
     }
   }
@@ -64,64 +56,39 @@ const MakeABet4: FunctionComponent = ({navigation, route}) => {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-start',
+              alignItems: 'center',
               width: '100%'
             }}
           >
-            {resolvedDate && 
-            <>
-              <RegularText
-                textStyle={{color: colors.tertiary, textAlign: 'left', width: '100%'}}
-              >
-                The bet will be resolved on
-              </RegularText>
-              <RegularText
-                textStyle={{color: colors.tertiary, width: '100%', textAlign: 'left', fontWeight: 'bold'}}
-              >
-                {resolvedDate.toDateString()} at {resolvedDate.toLocaleTimeString()}
-              </RegularText>
-            </>    
-            }
-            
 
-
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 5, marginBottom: 20}}>
-              When's the last day for someone to cast their bet?
+            <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
+              OK, we will know the outcome of the bet on
+            </LargeText>  
+            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, textAlign: 'left', width: '100%'}}>
+              {date.toDateString()}
             </LargeText>  
 
-            {resolvedDate ? 
+
+            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 20}}>
+              At what time?
+            </LargeText>  
+
             <StyledView
-              style={{backgroundColor: colors.tertiary}}
+              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width:'80%'}}
             >
               <DateTimePicker
                 testID="dateTimePicker"
                 value={date}
-                mode={'date'}
-                display='inline'
+                display='spinner'
+                mode={'time'}
+                is24Hour={true}
                 onChange={onChange}
-                minimumDate={new Date()}
-                maximumDate={new Date(resolvedDate)}
-              /> 
-            </StyledView>
-            :
-            <StyledView
-              style={{backgroundColor: colors.tertiary}}
-            >
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={'date'}
-                display='inline'
-                onChange={onChange}
-                minimumDate={new Date()}
+                style={{alignSelf: 'center', width: '80%'}}
               />
             </StyledView>
-            }
-
-
 
             <MessageBox
-              textStyle={{ marginBottom: 20 }}
+              textStyle={{ marginBottom: 20}}
             >
               { message || ' ' }
             </MessageBox>

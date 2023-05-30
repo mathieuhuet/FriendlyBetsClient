@@ -1,6 +1,9 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { UserContext } from '../../context/user/userContext';
+
 
 
 // Custom components
@@ -8,10 +11,12 @@ import MainContainer from '../../components/containers/mainContainer';
 import LargeText from '../../components/texts/largeText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
+import MessageBox from '../../components/texts/messageBox';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
-import RegularText from '../../components/texts/regularText';
+import { makeABet } from '../../services/betServices/makeABet';
+import StyledView from '../../components/views/styledView';
 
 
 const Background = styled.Image`
@@ -24,11 +29,45 @@ const Background = styled.Image`
 
 
 const MakeABet6: FunctionComponent = ({navigation, route}) => {
-
+  const user = useContext(UserContext);
+  const [message, setMessage] = useState('');
+  const [isResolvedDate, setIsResolvedDate] = useState(false);
+  const [resolvedDate, setResolvedDate] = useState(null);
   const betData = route.params;
+  const [date, setDate] = useState(new Date(betData.bettingEndAt));
 
-  console.log(betData);
+  useEffect(() => {
+    if (betData.betResolvedAt) {
+      setResolvedDate(new Date(betData.betResolvedAt));
+      setIsResolvedDate(true);
+    }
+  }, [betData])
 
+
+
+  const handleNewBet = async () => {
+    try {
+      setMessage('');
+      // call backend and move to next page if successful
+      if (new Date () > date) {
+        setMessage('Date invalid');
+      } else {
+        const bet = {...betData, bettingEndAt: Date.parse(date), createdAt: Date.parse(new Date())}
+        const result = await makeABet(bet, user.accessToken)
+        if (result.data) {
+          navigation.navigate('MakeABet7', result.data);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      setMessage(err.message);
+    }
+  }
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setDate(currentDate);
+  };
 
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
@@ -40,94 +79,60 @@ const MakeABet6: FunctionComponent = ({navigation, route}) => {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              width: '100%',
-              backgroundColor: colors.tertiary,
-              borderRadius: 30,
+              width: '100%'
             }}
           >
-            <View
-              style={{padding: 10, marginTop: 20, width: '100%'}}
-            >
-              <RegularText
-                textStyle={{color: colors.primary,textAlign: 'left'}}
-              >
-                Your bet :
-              </RegularText>
-              <RegularText
-                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
-              >
-                "{betData.betTitle}"
-              </RegularText>
-              <RegularText
-                textStyle={{color: colors.primary, textAlign: 'left',}}
-              >
-                has been created succesfully.
-              </RegularText>
-            </View>
-            <View
-              style={{padding: 10, marginTop: 5, width: '100%'}}
-            >
-              <RegularText
-                textStyle={{color: colors.primary, textAlign: 'left'}}
-              >
-                Participants have until
-              </RegularText>
-              <RegularText
-                textStyle={{fontWeight: 'bold', color: colors.primary, textAlign: 'left'}}
-              >
-                {new Date(betData.bettingEndAt).toDateString()} at {new Date(betData.bettingEndAt).toLocaleTimeString()}
-              </RegularText>
-              <RegularText
-                textStyle={{color: colors.primary, textAlign: 'left'}}
-              >
-                to cast their bet.
-              </RegularText>
-            </View>
-            <View
-              style={{padding: 10, marginTop: 5, marginBottom: 20, width: '100%'}}
-            >
-              {betData.betResolvedAt ?
-                <>
-                  <RegularText
-                    textStyle={{color: colors.primary, textAlign: 'left'}}
-                  >
-                    The outcome of the bet will be known on
-                  </RegularText>
-                  <RegularText
-                    textStyle={{fontWeight: 'bold', color: colors.primary, textAlign: 'left'}}
-                  >
-                    {new Date(betData.betResolvedAt).toDateString()} at {new Date(betData.betResolvedAt).toLocaleTimeString()}
-                  </RegularText>
-                </>
-                :
-                <RegularText
-                  textStyle={{fontWeight: 'bold', color: colors.primary, textAlign: 'left'}}
-                >
-                  You'll decide of the outcome of the bet.
-                </RegularText>
-              }
-            </View>
+            
+            <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
+              OK, the last day to make a bet is on
+            </LargeText> 
+            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, textAlign: 'left', width: '100%'}}>
+              {date.toDateString()}
+            </LargeText>  
 
-            <LargeText
-              textStyle={{textAlign: 'left', color: colors.primary, fontSize: 26, padding: 10}}
-            >
-              SHARE THE CODE BELOW TO EVERYONE WHO WANTS TO JOIN THIS BET
-            </LargeText>
-            <View
-              style={{ marginBottom: 20, backgroundColor: colors.tertiary, padding: 10, borderWidth: 10, borderColor: colors.primary}}
-            >
-              <LargeText
-                textStyle={{fontWeight: 'bold', fontSize: 42, color: colors.primary, textAlign: 'center'}}
-              >
-                {betData.betCode}
-              </LargeText>
-            </View>
+            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 20}}>
+              At what time?
+            </LargeText>  
 
+            <StyledView
+              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width: '80%'}}
+            >
+            {isResolvedDate ? 
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={'time'}
+              display='spinner'
+              is24Hour={true}
+              onChange={onChange}
+              style={{alignSelf: 'center', width: '80%'}}
+              minimumDate={new Date()}
+              maximumDate={new Date(resolvedDate)}
+            /> :
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={'time'}
+              display='spinner'
+              is24Hour={true}
+              onChange={onChange}
+              style={{alignSelf: 'center', width: '80%'}}
+              minimumDate={new Date()}
+            />
+            }
+            </StyledView>
+
+            <MessageBox
+              textStyle={{ marginBottom: 20 }}
+            >
+              { message || ' ' }
+            </MessageBox>
             <RegularButton
-              onPress={() => navigation.navigate('Dashboard')}
-              textStyle={{fontWeight: 'bold', fontSize: 20}}
+              onPress={handleNewBet}
+              style={{marginBottom: 10, backgroundColor: colors.primary}}
+              textStyle={{color: colors.purple, fontSize: 20}}
             >
-              OK
+              Next
             </RegularButton>
           </View>
         </MainContainer>

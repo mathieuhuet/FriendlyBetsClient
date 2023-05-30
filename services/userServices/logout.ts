@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API = process.env.REACT_NATIVE_USER_API
-? process.env.REACT_NATIVE_USER_API
+const API = process.env.FRIENDLYBETS_USER_API
+? process.env.FRIENDLYBETS_USER_API
 : 'http://127.0.0.1:5000/user';
 
 

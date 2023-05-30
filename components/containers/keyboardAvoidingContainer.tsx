@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react';
-import { KeyboardAvoidingView, Keyboard, ScrollView, Pressable, Platform } from 'react-native';
+import { KeyboardAvoidingView, Keyboard, ScrollView, Pressable, Platform, View } from 'react-native';
+import PressableText from '../texts/pressableText';
 
 
 interface Props {
@@ -13,7 +14,7 @@ const KeyboardAvoidingContainer: FunctionComponent<Props> = (props) => {
         backgroundColor: 'transparent',
       }}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      keyboardVerticalOffset={15}
+      keyboardVerticalOffset={0}
     >
       <ScrollView
         showsVerticalScrollIndicator={false}

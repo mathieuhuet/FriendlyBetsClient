@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import styled from 'styled-components/native';
 
 
@@ -15,6 +15,7 @@ import RegularText from '../../components/texts/regularText';
 import { ScrollView } from 'react-native-gesture-handler';
 import StyledView from '../../components/views/styledView';
 import { sortBetByDate } from '../../utils/sortBetByDate';
+import ParticipantsIcon from '../../components/icons/participantsIcon';
 
 
 const Background = styled.Image`
@@ -42,27 +43,43 @@ const ViewBets: FunctionComponent = ({navigation}) => {
     }
     getBets();
   }, [user])
-  
+
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.accent}} >
       <Background source={background} />
       <MainContainer style={{backgroundColor: 'transparent'}}>
-        <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.primary}}>
-          View bets
-        </LargeText>
         {betsLoaded ?
+          !bets.length ?
+          <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.primary}}>
+            You're not part of any bet yet.
+          </LargeText>
+          :
           <ScrollView>
+            <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.primary}}>
+              View bets
+            </LargeText>
             {bets.map((bet) => 
               <StyledView
                 style={{backgroundColor: colors.primary, width: '100%', marginBottom: 10, padding: 10, borderRadius: 10}}
                 key={bet._id.toString()}
                 onPress={() => navigation.navigate('BetDetails', bet)}
               >
-                <LargeText
-                  textStyle={{marginBottom: 10}}
+                <View
+                  style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row'}}
                 >
-                  {bet.betTitle}
-                </LargeText>
+                  <LargeText
+                    textStyle={{marginBottom: 10}}
+                  >
+                    {bet.betTitle}
+                  </LargeText>
+                  {user._id === bet.admin ?
+                    <RegularText>
+                      ⭐
+                    </RegularText>
+                  :
+                    <></>
+                  }
+                </View>
                 <RegularText>
                   Betting ends : 
                   <RegularText
@@ -71,6 +88,10 @@ const ViewBets: FunctionComponent = ({navigation}) => {
                     {new Date(bet.bettingEndAt).toDateString()} at {new Date(bet.bettingEndAt).toLocaleTimeString()}
                   </RegularText>
                 </RegularText>
+                <ParticipantsIcon
+                  betId={bet._id}
+                  accessToken={user.accessToken}
+                />
               </StyledView>
             )}
           </ScrollView>

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { StyleProp, TextStyle } from "react-native";
+import { StyleProp, ViewStyle } from "react-native";
 // Styled components
 import styled from 'styled-components/native';
 import { StatusBarHeight } from '../shared';
@@ -15,7 +15,7 @@ const StyledView = styled.View`
 
 interface Props {
   children: React.ReactNode;
-  style?: StyleProp<TextStyle>;
+  style?: StyleProp<ViewStyle>;
 }
 
 const MainContainer: FunctionComponent<Props> = (props) => {

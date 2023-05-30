@@ -1,7 +1,9 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
+import { Formik } from 'formik';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 // Custom components
 import MainContainer from '../../components/containers/mainContainer';
@@ -15,6 +17,7 @@ import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoid
 import RegularText from '../../components/texts/regularText';
 import StyledCheckBox from '../../components/inputs/styledCheckBox';
 import StyledView from '../../components/views/styledView';
+import TextInput from '../../components/inputs/textInput';
 
 
 const Background = styled.Image`
@@ -28,86 +31,141 @@ const Background = styled.Image`
 
 const MakeABet2: FunctionComponent = ({navigation, route}) => {
   const [message, setMessage] = useState('');
-  const [check, setCheck]= useState(false);
   const betData = route.params;
-  const [date, setDate] = useState(new Date());
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(null);
+  const [items, setItems] = useState([
+    {label: '🍷 Drink', value: 'drink'},
+    {label: '🍻 Pay a round of drink', value: 'roundDrink', parent: 'drink'},
+    {label: '🥃 Shots', value: 'shots', parent: 'drink'},
+    {label: '💸 Money', value: 'money'},
+    {label: '⛑ Charity donation', value: 'charity', parent: 'money'},
+    {label: '🎁 Gift', value: 'gift', parent: 'money'},
+    {label: '🍝 Meal', value: 'meal'},
+    {label: '🧹 Chore', value: 'chore'},
+  ]);
 
 
-  const handleNewBet = () => {
+  const handleNewBet = (betExplain, setSubmitting) => {
     setMessage('');
-    if (check) {
-      const bet = {...betData, betResolvedAt: ''}
-      navigation.navigate('MakeABet4', bet);
-    } else if (!date) {
-      setMessage('Date invalid');
+    if (!value) {
+      setMessage('Select the stake.');
+      setSubmitting(false);
     } else {
-      const bet = {...betData, betResolvedAt: Date.parse(date)}
+      const bet = {...betData, bet: value, betExplain: betExplain}
       navigation.navigate('MakeABet3', bet);
+      setSubmitting(false);
     }
   }
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setDate(currentDate);
-  };
   
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
       <Background source={background} />
-      <KeyboardAvoidingContainer>
         <MainContainer style={{backgroundColor: 'transparent'}}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '100%'
+          <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 30}}>
+            What are you waging?
+          </LargeText>  
+          <DropDownPicker
+            placeholder='Select the stake'
+            open={open}
+            value={value}
+            items={items}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+            maxHeight={400}
+            dropDownContainerStyle={{
+              backgroundColor: colors.primary
             }}
-          >
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 10}}>
-              When will this bet be resolved?
-            </LargeText>  
+            style={{
+              backgroundColor: colors.primary,
+            }}
+            containerStyle={{
+              height: 70
+            }}
+            textStyle={{
+              color: colors.tertiary,
+              fontSize: 18
+            }}
+            listParentLabelStyle={{
+              fontWeight: "bold"
+            }}
+            listChildContainerStyle={{
+              paddingLeft: 20
+            }}
+            listItemContainerStyle={{
+              height: 40
+            }}
+            theme="DARK"
+            multiple={false}
+            mode="BADGE"
+            itemSeparator={true}
+          />
+          <KeyboardAvoidingContainer>
+            <Formik
+              initialValues={{betExplain: ''}}
+              onSubmit={(values, {setSubmitting}) => {
+                if (values.betExplain === '') {
+                  setMessage('Please fill all the required fields.');
+                  setSubmitting(false);
+                } else {
+                  handleNewBet(values.betExplain, setSubmitting);
+                }
+              }}
+            >
+              {({handleChange, handleBlur, handleSubmit, values, isSubmitting, setFieldValue}) => (
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  width: '100%'
+                }}
+              >
+                <RegularText
+                  textStyle={{right: '30%', marginTop: 20, fontWeight: 'bold'}}
+                >
+                  Explain the bet
+                </RegularText>
+                <TextInput
+                  keyboardType="default"
+                  placeholder=''
+                  onChangeText={handleChange('betExplain')}
+                  onBlur={handleBlur('betExplain')}
+                  value={values.betExplain}
+                  inputFieldStyle={{ marginBottom: 10, height: 120, borderWidth: 0 }}
+                  multiline={true}
+                />
 
-            <StyledCheckBox
-              isChecked={check}
-              setChecked={() => setCheck(!check)}
-              name={'selfDateResolving'}
-              boxColor={colors.primary}
-            >
-              <RegularText textStyle={{textAlign: 'left', fontWeight: 'bold', fontSize: 20}}>
-                I will decide when the bet is resolved.
-              </RegularText>
-            </StyledCheckBox>
-
-            <StyledView
-              style={{backgroundColor: colors.tertiary, marginTop: 10}}
-            >
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={'date'}
-              display='inline'
-              onChange={onChange}
-              minimumDate={new Date()}
-              disabled={check}
-            />
-            </StyledView>
-
-            <MessageBox
-              textStyle={{ marginBottom: 20 }}
-            >
-              { message || ' ' }
-            </MessageBox>
-            <RegularButton
-              onPress={handleNewBet}
-              style={{marginBottom: 10, backgroundColor: colors.primary}}
-              textStyle={{color: colors.purple, fontSize: 20}}
-            >
-              Next
-            </RegularButton>
-          </View>
+                <MessageBox
+                  textStyle={{ marginBottom: 20 }}
+                >
+                  { message || ' ' }
+                </MessageBox>
+                {!isSubmitting &&
+                values.betExplain &&
+                <RegularButton
+                  onPress={handleSubmit}
+                  style={{marginBottom: 10, backgroundColor: colors.accent}}
+                  textStyle={{color: colors.primary, fontSize: 20, fontWeight: 700}}
+                >
+                  Next
+                </RegularButton>}
+                {!values.betExplain &&<RegularButton
+                  onPress={handleSubmit}
+                  style={{marginBottom: 10, backgroundColor: colors.primary}}
+                  textStyle={{color: colors.purple, fontSize: 20}}
+                  disabled={true}
+                >
+                  Next
+                </RegularButton>}
+              </View>
+            )}
+            </Formik>
+          </KeyboardAvoidingContainer>
         </MainContainer>
-      </KeyboardAvoidingContainer>
     </MainContainer>
   );
 }

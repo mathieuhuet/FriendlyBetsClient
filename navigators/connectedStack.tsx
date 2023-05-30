@@ -10,6 +10,7 @@ import MakeABet3 from '../screens/makeABet/makeABet3';
 import MakeABet4 from '../screens/makeABet/makeABet4';
 import MakeABet5 from '../screens/makeABet/makeABet5';
 import MakeABet6 from '../screens/makeABet/makeABet6';
+import MakeABet7 from '../screens/makeABet/makeABet7';
 import JoinABet from '../screens/joinABet/joinABet';
 import ViewBets from '../screens/viewBets/viewBets';
 import BetDetails from '../screens/viewBets/betDetails';
@@ -62,6 +63,10 @@ const ConnectedStack: FunctionComponent = (props) => {
         <Stack.Screen 
           name='MakeABet6'
           component={MakeABet6}
+        />
+        <Stack.Screen 
+          name='MakeABet7'
+          component={MakeABet7}
         />
         <Stack.Screen
           name='JoinABet'
