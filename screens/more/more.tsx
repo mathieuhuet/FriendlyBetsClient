@@ -60,9 +60,6 @@ const More: FunctionComponent = ({navigation}) => {
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.tertiary}} >
       <Background source={background} />
       <MainContainer style={{backgroundColor: 'transparent'}}>
-        <LargeText textStyle={{marginBottom: 25, fontWeight: 'bold', color: colors.primary}}>
-          More
-        </LargeText>
         <View
           style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', height: '30%'}}
         >

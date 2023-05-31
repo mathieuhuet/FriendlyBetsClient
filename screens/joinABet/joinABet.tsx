@@ -13,7 +13,7 @@ import LargeText from '../../components/texts/largeText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
 import BetCodeInput from '../../components/inputs/betCodeInput';
-import { joinABet } from '../../services/betServices/joinABet'
+import { checkJoinABet } from '../../services/betServices/checkJoinABet';
 import MessageModal from '../../components/modals/messageModal';
 import { UserContext } from '../../context/user/userContext';
 
@@ -46,9 +46,6 @@ const JoinABet: FunctionComponent = ({navigation}) => {
 
   const modalButtonHandler = async () => {
     setModalVisible(false);
-    if (modalMessageType === 'success') {
-      navigation.navigate('Dashboard');
-    }
   }
 
   const showModal = (type:string, headerText:string, message:string, buttonText:string) => {
@@ -62,12 +59,13 @@ const JoinABet: FunctionComponent = ({navigation}) => {
   const handleJoinBet = async () => {
     try {
       setVerifying(true);
-      const result = await joinABet({betCode: code}, user.accessToken);
+      const result = await checkJoinABet({betCode: code}, user.accessToken);
       setVerifying(false);
       if (result.data) {
-        return showModal('success', 'All Good!', result.message, 'Proceed');
+        navigation.navigate('JoinABetConfirm', result.data);
+      } else {
+        return showModal('failed', 'Uh oh...', result.message, 'OK');
       }
-      return showModal('failed', 'Uh oh...', result.message, 'OK');
     } catch (error) {
       setVerifying(false);
       return showModal('failed', 'Uh oh...', error.message, 'OK');
@@ -113,14 +111,14 @@ const JoinABet: FunctionComponent = ({navigation}) => {
           style={{backgroundColor: colors.primary}}
           textStyle={{color: colors.tertiary , fontSize: 20}}
         >
-          Join Bet
+          Next
         </RegularButton>}
         {!verifying && !pinReady && <RegularButton
           disabled={true} 
           style={{backgroundColor: colors.secondary}}
           textStyle={{color: colors.lightGray, fontSize: 20}}
         >
-          Join Bet
+          Next
         </RegularButton>}
         <MessageModal
           headerText={modalHeaderText}

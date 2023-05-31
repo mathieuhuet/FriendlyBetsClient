@@ -44,6 +44,7 @@ const MakeABet2: FunctionComponent = ({navigation, route}) => {
     {label: '🎁 Gift', value: 'gift', parent: 'money'},
     {label: '🍝 Meal', value: 'meal'},
     {label: '🧹 Chore', value: 'chore'},
+    {label: '⚙️ Custom', value: 'custom'}
   ]);
 
 
@@ -53,7 +54,7 @@ const MakeABet2: FunctionComponent = ({navigation, route}) => {
       setMessage('Select the stake.');
       setSubmitting(false);
     } else {
-      const bet = {...betData, bet: value, betExplain: betExplain}
+      const bet = {...betData, betType: value, betExplain: betExplain}
       navigation.navigate('MakeABet3', bet);
       setSubmitting(false);
     }

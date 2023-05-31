@@ -1,7 +1,8 @@
-import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
+import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components/native';
 import { View } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 
 // Custom components
@@ -16,7 +17,6 @@ import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoid
 import StyledView from '../../components/views/styledView';
 
 
-
 const Background = styled.Image`
   width: 100%;
   height: ${ScreenHeight * 0.6}px;
@@ -29,18 +29,23 @@ const Background = styled.Image`
 const MakeABet4: FunctionComponent = ({navigation, route}) => {
   const [message, setMessage] = useState('');
   const betData = route.params;
-  const [date, setDate] = useState(new Date(betData.betResolvedAt));
+  const [date, setDate] = useState(new Date(betData.bettingEndAt));
 
 
-  const handleNewBet = () => {
+
+  const handleNewBet = async () => {
     setMessage('');
     if (new Date () > date) {
-      setMessage('Invalid date, bet cannot happen in the past.');
+      setMessage('Date invalid');
     } else {
-      const bet = {...betData, betResolvedAt: Date.parse(date)}
+      const bet = {...betData, bettingEndAt: Date.parse(date), createdAt: Date.parse(new Date())}
       navigation.navigate('MakeABet5', bet);
     }
   }
+
+
+  
+
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -60,35 +65,37 @@ const MakeABet4: FunctionComponent = ({navigation, route}) => {
               width: '100%'
             }}
           >
-
+            
             <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
-              OK, we will know the outcome of the bet on
-            </LargeText>  
+              OK, the last day to make a bet is on
+            </LargeText> 
             <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, textAlign: 'left', width: '100%'}}>
               {date.toDateString()}
             </LargeText>  
-
 
             <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 20, marginBottom: 20}}>
               At what time?
             </LargeText>  
 
             <StyledView
-              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width:'80%'}}
+              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width: '80%'}}
             >
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                display='spinner'
-                mode={'time'}
-                is24Hour={true}
-                onChange={onChange}
-                style={{alignSelf: 'center', width: '80%'}}
-              />
+
+            <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={'time'}
+              display='spinner'
+              is24Hour={true}
+              onChange={onChange}
+              style={{alignSelf: 'center', width: '80%'}}
+              minimumDate={new Date()}
+            />
+
             </StyledView>
 
             <MessageBox
-              textStyle={{ marginBottom: 20}}
+              textStyle={{ marginBottom: 20 }}
             >
               { message || ' ' }
             </MessageBox>

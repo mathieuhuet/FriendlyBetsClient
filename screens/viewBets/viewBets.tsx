@@ -16,6 +16,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import StyledView from '../../components/views/styledView';
 import { sortBetByDate } from '../../utils/sortBetByDate';
 import ParticipantsIcon from '../../components/icons/participantsIcon';
+import { getBetOptions } from '../../components/betOptions';
 
 
 const Background = styled.Image`
@@ -68,7 +69,7 @@ const ViewBets: FunctionComponent = ({navigation}) => {
                   style={{display: 'flex', justifyContent: 'space-between', flexDirection: 'row'}}
                 >
                   <LargeText
-                    textStyle={{marginBottom: 10}}
+                    textStyle={{fontWeight: 'bold'}}
                   >
                     {bet.betTitle}
                   </LargeText>
@@ -80,6 +81,11 @@ const ViewBets: FunctionComponent = ({navigation}) => {
                     <></>
                   }
                 </View>
+                <LargeText
+                  textStyle={{fontSize: 20, textAlign: 'right'}}
+                >
+                  {getBetOptions(bet.betType)}
+                </LargeText>
                 <RegularText>
                   Betting ends : 
                   <RegularText

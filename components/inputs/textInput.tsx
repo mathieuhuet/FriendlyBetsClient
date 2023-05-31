@@ -28,7 +28,7 @@ const InputField = styled.TextInput`
 interface Props {
   multiline?: boolean;
   keyboardType?: any;
-  inputFieldStyle?: StyleProp<TextStyle>;
+  inputFieldStyle?: StyleProp<View>;
   placeholder?: string;
   onChangeText?: any;
   onBlur?: any;

@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { View, ActivityIndicator } from 'react-native';
+import { Formik } from 'formik';
 
 
 // Custom components
@@ -9,13 +9,16 @@ import MainContainer from '../../components/containers/mainContainer';
 import LargeText from '../../components/texts/largeText';
 import { ScreenHeight } from '../../components/shared';
 import { colors } from '../../components/colors';
-import MessageBox from '../../components/texts/messageBox';
 import background from '../../assets/backgrounds/card_background_v1.png';
 import RegularButton from '../../components/buttons/regularButton';
 import KeyboardAvoidingContainer from '../../components/containers/keyboardAvoidingContainer';
 import RegularText from '../../components/texts/regularText';
-import StyledView from '../../components/views/styledView';
-
+import { getBetOptions } from '../../components/betOptions';
+import MessageBox from '../../components/texts/messageBox';
+import MessageModal from '../../components/modals/messageModal';
+import TextInput from '../../components/inputs/textInput';
+import { makeABet } from '../../services/betServices/makeABet';
+import { UserContext } from '../../context/user/userContext';
 
 
 const Background = styled.Image`
@@ -28,32 +31,49 @@ const Background = styled.Image`
 
 
 const MakeABet5: FunctionComponent = ({navigation, route}) => {
-  const [message, setMessage] = useState('');
-  const [resolvedDate, setResolvedDate] = useState(null);
+  const user = useContext(UserContext);
   const betData = route.params;
-  const [date, setDate] = useState(new Date());
+  const [message, setMessage] = useState('');
 
-  useEffect(() => {
-    if (betData.betResolvedAt) {
-      setResolvedDate(new Date(betData.betResolvedAt));
-    }
-  }, [betData])
+  // TODO changing all those useState into a single useReducer
+  // Modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessageType, setModalMessageType] = useState('');
+  const [modalHeaderText, setModalHeaderText] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [modalButtonText, setModalButtonText] = useState('');
 
-
-  const handleNewBet = () => {
-    setMessage('');
-    if (!date) {
-      setMessage('Date invalid');
-    } else {
-      const bet = {...betData, bettingEndAt: Date.parse(date)}
-      navigation.navigate('MakeABet6', bet);
-    }
+  const modalButtonHandler = async () => {
+    setModalVisible(false);
+    navigation.navigate('Dashboard');
   }
 
-  const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
-    setDate(currentDate);
-  };
+  const showModal = (type:string, headerText:string, message:string, buttonText:string) => {
+    setModalMessageType(type);
+    setModalHeaderText(headerText);
+    setModalMessage(message);
+    setModalButtonText(buttonText);
+    setModalVisible(true);
+  }
+
+  const handleNewBet = async (values, setSubmitting) => {
+    try {
+      setMessage('');
+      // call backend and move to next page if successful
+      const bet = {...betData, userBet: values.bet, createdAt: Date.parse(new Date())}
+      const result = await makeABet(bet, user.accessToken)
+      setSubmitting(false);
+      if (result.data) {
+        console.log(result.data);
+        return showModal('success', 'All Good!', result.message, 'OK');
+      }
+      return showModal('failed', 'Uh oh...', result.message, 'OK');
+    } catch (err) {
+      console.log(err);
+      setSubmitting(false);
+      setMessage(err.message);
+    }
+  }
 
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
@@ -64,79 +84,169 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
             style={{
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'flex-start',
-              width: '100%'
+              alignItems: 'center',
+              width: '100%',
+              backgroundColor: colors.tertiary,
+              borderRadius: 30,
             }}
           >
-            {resolvedDate && 
-            <>
+            <View
+              style={{padding: 10, marginTop: 12, width: '100%'}}
+            >
               <RegularText
-                textStyle={{color: colors.tertiary, textAlign: 'left', width: '100%'}}
+                textStyle={{color: colors.primary,textAlign: 'left'}}
               >
-                The bet will be resolved on
+                Your bet :
               </RegularText>
               <RegularText
-                textStyle={{color: colors.tertiary, width: '100%', textAlign: 'left', fontWeight: 'bold'}}
+                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
               >
-                {resolvedDate.toDateString()} at {resolvedDate.toLocaleTimeString()}
+                "{betData.betTitle}"
               </RegularText>
-            </>    
-            }
-            
-
-
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 5, marginBottom: 20}}>
-              When's the last day for someone to cast their bet?
-            </LargeText>  
-
-            {resolvedDate ? 
-            <StyledView
-              style={{backgroundColor: colors.tertiary}}
+              <RegularText
+                textStyle={{color: colors.primary, textAlign: 'left',}}
+              >
+                has been created succesfully.
+              </RegularText>
+            </View>
+            <View
+              style={{padding: 10, width: '100%'}}
             >
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={'date'}
-                display='inline'
-                onChange={onChange}
-                minimumDate={new Date()}
-                maximumDate={new Date(resolvedDate)}
-              /> 
-            </StyledView>
-            :
-            <StyledView
-              style={{backgroundColor: colors.tertiary}}
+              <RegularText
+                textStyle={{color: colors.primary,textAlign: 'left'}}
+              >
+                The person(s) who lose must provide the winner : 
+              </RegularText>
+              <RegularText
+                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
+              >
+                {getBetOptions(betData.betType)}
+              </RegularText>
+              <RegularText
+                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
+              >
+                "{betData.betExplain}"
+              </RegularText>
+            </View>
+            <View
+              style={{padding: 10, marginTop: 5, width: '100%'}}
             >
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={'date'}
-                display='inline'
-                onChange={onChange}
-                minimumDate={new Date()}
-              />
-            </StyledView>
-            }
-
-
-
-            <MessageBox
-              textStyle={{ marginBottom: 20 }}
-            >
-              { message || ' ' }
-            </MessageBox>
-            <RegularButton
-              onPress={handleNewBet}
-              style={{marginBottom: 10, backgroundColor: colors.primary}}
-              textStyle={{color: colors.purple, fontSize: 20}}
-            >
-              Next
-            </RegularButton>
+              <RegularText
+                textStyle={{color: colors.primary, textAlign: 'left'}}
+              >
+                Participants have until
+              </RegularText>
+              <RegularText
+                textStyle={{fontWeight: 'bold', color: colors.primary, textAlign: 'left'}}
+              >
+                {new Date(betData.bettingEndAt).toDateString()} at {new Date(betData.bettingEndAt).toLocaleTimeString()}
+              </RegularText>
+              <RegularText
+                textStyle={{color: colors.primary, textAlign: 'left', marginBottom: 12}}
+              >
+                to cast their bet.
+              </RegularText>
+            </View>
           </View>
+
+            <Formik
+              initialValues={{bet: ''}}
+              onSubmit={(values, {setSubmitting}) => {
+                if (values.bet === '') {
+                  setMessage('Please write your bet.');
+                  setSubmitting(false);
+                } else {
+                  handleNewBet(values, setSubmitting);
+                }
+              }}
+            >
+              {({handleChange, handleBlur, handleSubmit, values, isSubmitting, setFieldValue}) => (
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    width: '100%',
+                    marginTop: 30
+                  }}
+                >
+                  <RegularText
+                    textStyle={{right: 20, fontSize: 20, fontWeight: 700, color: colors.primary}}
+                  >
+                    Write the outcome you're betting on.
+                  </RegularText>
+                  <TextInput
+                    keyboardType="default"
+                    placeholder=''
+                    onChangeText={handleChange('bet')}
+                    onBlur={handleBlur('bet')}
+                    value={values.bet}
+                    inputFieldStyle={{ marginBottom: 10, fontSize: 20, fontWeight: 'bold', height: 80, borderWidth: 0 }}
+                    multiline={true}
+                  />
+                  <MessageBox
+                    textStyle={{ marginBottom: 10, marginTop: 10 }}
+                  >
+                    { message || ' ' }
+                  </MessageBox>
+                  {isSubmitting && <RegularButton
+                    style={{marginBottom: 10, backgroundColor: colors.primary}}
+                  >
+                    <ActivityIndicator
+                      size="small"
+                      color={colors.primary}
+                    />
+                  </RegularButton>}
+                  {!isSubmitting &&
+                  values.bet &&
+                  <RegularButton
+                    onPress={handleSubmit}
+                    style={{marginBottom: 10, backgroundColor: colors.accent}}
+                    textStyle={{color: colors.primary, fontSize: 20, fontWeight: 700}}
+                  >
+                    Create a bet
+                  </RegularButton>}
+                  {!values.bet &&<RegularButton
+                    onPress={handleSubmit}
+                    style={{marginBottom: 10, backgroundColor: colors.lightGray}}
+                    textStyle={{color: colors.darkGray, fontSize: 20}}
+                    disabled={true}
+                  >
+                    Create a bet
+                  </RegularButton>}
+                </View>
+              )}
+            </Formik>
+
+            <MessageModal
+              headerText={modalHeaderText}
+              message={modalMessage}
+              modalVisible={modalVisible}
+              type={modalMessageType}
+              buttonText={modalButtonText}
+              buttonHandler={modalButtonHandler}
+            />
         </MainContainer>
       </KeyboardAvoidingContainer>
     </MainContainer>
   );
 }
+
+/*
+<LargeText
+textStyle={{textAlign: 'left', color: colors.primary, fontSize: 26, padding: 10}}
+>
+SHARE THE CODE BELOW TO EVERYONE WHO WANTS TO JOIN THIS BET
+</LargeText>
+<View
+style={{ marginBottom: 20, backgroundColor: colors.tertiary, padding: 10, borderWidth: 10, borderColor: colors.primary}}
+>
+<LargeText
+  textStyle={{fontWeight: 'bold', fontSize: 42, color: colors.primary, textAlign: 'center'}}
+>
+  {betData.betCode}
+</LargeText>
+</View>
+*/
 
 export default MakeABet5;
