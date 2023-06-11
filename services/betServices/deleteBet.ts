@@ -1,7 +1,7 @@
 import axios from 'axios';
 const API = process.env.REACT_APP_BET_API
 ? process.env.REACT_APP_BET_API
-: 'http://127.0.0.1:5000/bet';
+: 'http://192.168.1.5:10101/bet';
 
 export const deleteBet = (sendData, accessToken: string) => {
   return new Promise(async (resolve, reject) => {

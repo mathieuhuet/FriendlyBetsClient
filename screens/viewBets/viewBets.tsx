@@ -88,11 +88,11 @@ const ViewBets: FunctionComponent = ({navigation}) => {
                 </LargeText>
                 <RegularText>
                   Betting ends : 
-                  <RegularText
+                </RegularText>
+                <RegularText
                   textStyle={{fontWeight: 'bold'}}
                   >
-                    {new Date(bet.bettingEndAt).toDateString()} at {new Date(bet.bettingEndAt).toLocaleTimeString()}
-                  </RegularText>
+                    {new Date(bet.bettingEndAt).toDateString()} at {new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3)}
                 </RegularText>
                 <ParticipantsIcon
                   betId={bet._id}

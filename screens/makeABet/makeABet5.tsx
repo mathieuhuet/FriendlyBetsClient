@@ -19,6 +19,7 @@ import MessageModal from '../../components/modals/messageModal';
 import TextInput from '../../components/inputs/textInput';
 import { makeABet } from '../../services/betServices/makeABet';
 import { UserContext } from '../../context/user/userContext';
+import MakeABetModal from '../../components/modals/makeABetModal';
 
 
 const Background = styled.Image`
@@ -34,6 +35,10 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
   const user = useContext(UserContext);
   const betData = route.params;
   const [message, setMessage] = useState('');
+
+  //makeABetModal
+  const [makeABetModalVisible, setMakeABetModalVisible] = useState(false);
+  const [betCode, setBetCode] = useState('');
 
   // TODO changing all those useState into a single useReducer
   // Modal
@@ -56,6 +61,11 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
     setModalVisible(true);
   }
 
+  const showMakeABetModal = (betCodeReceived:string) => {
+    setBetCode(betCodeReceived);
+    setMakeABetModalVisible(true);
+  }
+
   const handleNewBet = async (values, setSubmitting) => {
     try {
       setMessage('');
@@ -65,7 +75,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
       setSubmitting(false);
       if (result.data) {
         console.log(result.data);
-        return showModal('success', 'All Good!', result.message, 'OK');
+        return showMakeABetModal(result.data.betCode);
       }
       return showModal('failed', 'Uh oh...', result.message, 'OK');
     } catch (err) {
@@ -99,9 +109,9 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
                 Your bet :
               </RegularText>
               <RegularText
-                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
+                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left', fontSize: 20}}
               >
-                "{betData.betTitle}"
+                "{betData.betTitle.charAt(0).toUpperCase() + betData.betTitle.slice(1)}"
               </RegularText>
               <RegularText
                 textStyle={{color: colors.primary, textAlign: 'left',}}
@@ -118,7 +128,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
                 The person(s) who lose must provide the winner : 
               </RegularText>
               <RegularText
-                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
+                textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left', fontSize: 20}}
               >
                 {getBetOptions(betData.betType)}
               </RegularText>
@@ -139,7 +149,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               <RegularText
                 textStyle={{fontWeight: 'bold', color: colors.primary, textAlign: 'left'}}
               >
-                {new Date(betData.bettingEndAt).toDateString()} at {new Date(betData.bettingEndAt).toLocaleTimeString()}
+                {new Date(betData.bettingEndAt).toDateString()} at {new Date(betData.bettingEndAt).toLocaleTimeString().slice(0, -3)}
               </RegularText>
               <RegularText
                 textStyle={{color: colors.primary, textAlign: 'left', marginBottom: 12}}
@@ -171,7 +181,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
                   }}
                 >
                   <RegularText
-                    textStyle={{right: 20, fontSize: 20, fontWeight: 700, color: colors.primary}}
+                    textStyle={{fontSize: 20, fontWeight: 700, color: colors.primary, width: 300}}
                   >
                     Write the outcome you're betting on.
                   </RegularText>
@@ -181,7 +191,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
                     onChangeText={handleChange('bet')}
                     onBlur={handleBlur('bet')}
                     value={values.bet}
-                    inputFieldStyle={{ marginBottom: 10, fontSize: 20, fontWeight: 'bold', height: 80, borderWidth: 0 }}
+                    inputFieldStyle={{ fontSize: 20, fontWeight: 'bold', height: 80, borderWidth: 0 }}
                     multiline={true}
                   />
                   <MessageBox
@@ -226,27 +236,17 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               buttonText={modalButtonText}
               buttonHandler={modalButtonHandler}
             />
+            <MakeABetModal
+              buttonHandler={() => navigation.navigate('Dashboard')}
+              betTitle={betData.betTitle.charAt(0).toUpperCase() + betData.betTitle.slice(1)}
+              modalVisible={makeABetModalVisible}
+              betCode={betCode}
+            />
         </MainContainer>
       </KeyboardAvoidingContainer>
     </MainContainer>
   );
 }
 
-/*
-<LargeText
-textStyle={{textAlign: 'left', color: colors.primary, fontSize: 26, padding: 10}}
->
-SHARE THE CODE BELOW TO EVERYONE WHO WANTS TO JOIN THIS BET
-</LargeText>
-<View
-style={{ marginBottom: 20, backgroundColor: colors.tertiary, padding: 10, borderWidth: 10, borderColor: colors.primary}}
->
-<LargeText
-  textStyle={{fontWeight: 'bold', fontSize: 42, color: colors.primary, textAlign: 'center'}}
->
-  {betData.betCode}
-</LargeText>
-</View>
-*/
 
 export default MakeABet5;

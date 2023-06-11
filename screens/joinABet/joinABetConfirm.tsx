@@ -86,7 +86,7 @@ const JoinABetConfirm: FunctionComponent = ({navigation, route}) => {
           style={{backgroundColor: colors.tertiary, borderRadius: 10, marginVertical: 20, paddingHorizontal: 10, paddingBottom: 10}}
         >
           <LargeText
-            textStyle={{fontWeight: 'bold', color: colors.primary, marginTop: 20, fontSize: 40, marginBottom: 10}}
+            textStyle={{fontWeight: 'bold', color: colors.primary, marginTop: 20, fontSize: 30, marginBottom: 2}}
           >
             {betData.betTitle}
           </LargeText>
@@ -97,13 +97,8 @@ const JoinABetConfirm: FunctionComponent = ({navigation, route}) => {
               {betData.betExtraText}
             </RegularText>
           }
-          <SmallText
-            textStyle={{fontWeight: 'bold', color: colors.primary, marginBottom: 20}}
-          >
-            {'Bet created on ' + new Date(betData.createdAt).toDateString()}
-          </SmallText>
           <LargeText
-            textStyle={{fontWeight: 'bold', color: colors.primary, marginBottom: 5}}
+            textStyle={{fontWeight: 'bold', color: colors.primary, marginBottom: 5, fontSize: 20}}
           >
             {getBetOptions(betData.betType)}
           </LargeText>
@@ -121,6 +116,11 @@ const JoinABetConfirm: FunctionComponent = ({navigation, route}) => {
             betId={betData._id}
             accessToken={user.accessToken}
           />
+          <SmallText
+            textStyle={{fontWeight: 'bold', color: colors.primary, marginTop: 10}}
+          >
+            {'Bet created on ' + new Date(betData.createdAt).toDateString()}
+          </SmallText>
         </StyledView>
 
         <Formik

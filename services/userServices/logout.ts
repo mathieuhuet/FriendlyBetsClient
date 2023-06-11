@@ -1,13 +1,12 @@
 import axios from 'axios';
 const API = process.env.FRIENDLYBETS_USER_API
 ? process.env.FRIENDLYBETS_USER_API
-: 'http://127.0.0.1:5000/user';
+: 'http://192.168.1.5:10101/user';
 
 
 export const logoutUser = (accessToken:string) => {
   return new Promise((resolve, reject) => {
     console.log(API);
-    console.log(accessToken);
     axios.post(
       `${API}/logout`,
       {data: 'no data'},

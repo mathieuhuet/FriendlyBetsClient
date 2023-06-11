@@ -8,6 +8,7 @@ import LargeText from '../texts/largeText';
 import RegularText from '../texts/regularText';
 import RegularButton from '../buttons/regularButton';
 import ProfileIcon from '../icons/profileIcon';
+import SmallText from '../texts/smallText';
 
 
 const ModalPressableContainer = styled.Pressable`
@@ -39,6 +40,8 @@ interface Props {
   backgroundColor: string;
   police: string;
   modalVisible: boolean;
+  joinedAt?: number;
+  createdAt?: number;
 }
 
 const UserModal: FunctionComponent<Props> = (props) => {
@@ -60,6 +63,22 @@ const UserModal: FunctionComponent<Props> = (props) => {
               <LargeText>
                 {props.lastName}
               </LargeText>
+              {props.joinedAt &&
+              <>
+                {props.joinedAt === props.createdAt ?
+                  <SmallText>
+                    Created the bet on
+                  </SmallText>
+                :
+                  <SmallText>
+                    Joined the bet on
+                  </SmallText>
+                }
+                <RegularText>
+                  {new Date(props.joinedAt).toDateString()} at {new Date(props.joinedAt).toLocaleTimeString().slice(0, -3)}
+                </RegularText>
+              </>
+              }
             </View>
             <ProfileIcon
               firstName={props.firstName}

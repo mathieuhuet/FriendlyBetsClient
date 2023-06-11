@@ -1,9 +1,6 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
-import { ActivityIndicator, View, Pressable } from 'react-native';
+import { View, Pressable } from 'react-native';
 // Styled components
-import styled from 'styled-components/native';
-import { getProfileColorCode } from '../profileColors';
-import { ScreenHeight } from '../shared';
 import ProfileIcon from './profileIcon';
 import { getParticipants } from '../../services/betServices/getParticipants';
 import UserModal from '../modals/userModal';
