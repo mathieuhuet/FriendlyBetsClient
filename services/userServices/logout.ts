@@ -1,6 +1,7 @@
 import axios from 'axios';
-const API = process.env.FRIENDLYBETS_USER_API
-? process.env.FRIENDLYBETS_USER_API
+import { FRIENDLYBETS_USER_API } from '../../secret';
+const API = FRIENDLYBETS_USER_API
+? FRIENDLYBETS_USER_API
 : 'http://192.168.1.5:10101/user';
 
 

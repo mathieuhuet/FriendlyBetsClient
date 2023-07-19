@@ -27,8 +27,10 @@ const CodeInputsContainer = styled.Pressable`
 const CodeInput = styled.View`
   min-width: 15%;
   padding: 12px;
-  border-bottom-width: 5px;
-  border-radius: 10px;
+  border-bottom-width: 6px;
+  border-radius: 6px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
   border-color: ${colors.secondary};
 `;
 

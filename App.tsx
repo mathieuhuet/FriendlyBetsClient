@@ -5,6 +5,7 @@ import ConnectedStack from './navigators/connectedStack';
 import { UserContext, UserDispatchContext } from './context/user/userContext';
 import { initialUser, userReducer } from './context/user/userReducer';
 import { getUserInfo } from './services/userServices/getUserInfo';
+import { Platform } from 'react-native';
 
 
 
@@ -49,6 +50,7 @@ const App: FunctionComponent = () => {
       }
     });
   }, [accessToken])
+  console.log(Platform.OS);
   console.log(user, 'APP 4');
   return (
     <UserContext.Provider value={user}>

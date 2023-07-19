@@ -8,7 +8,7 @@ import { ScreenHeight } from '../shared';
 const IconBackground = styled.View`
   width: ${ScreenHeight * 0.1}px;
   height: ${ScreenHeight * 0.1}px;
-  border-radius: 100%;
+  border-radius: ${ScreenHeight * 0.1}px;
   justify-content: center;
   align-items: center;
   align-self: center;

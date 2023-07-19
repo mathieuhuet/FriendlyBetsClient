@@ -122,7 +122,9 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
         </StyledView>
         {user._id === bet.admin ?
           <>
-            <View>
+            <View
+              style={{position: 'absolute', display: 'flex', justifyContent: 'flex-end', alignContent: 'center', height: '100%', width: '100%'}}
+            >
               <RegularButton
                 style={{backgroundColor: colors.success, marginBottom: 20}}
                 onPress={() => {}}

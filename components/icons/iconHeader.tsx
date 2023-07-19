@@ -10,11 +10,12 @@ import { ScreenHeight } from '../shared';
 const IconBackground = styled.View`
   width: ${ScreenHeight * 0.15}px;
   height: ${ScreenHeight * 0.15}px;
-  border-radius: 100%;
+  border-radius: ${ScreenHeight * 0.15}px;
   justify-content: center;
   align-items: center;
   align-self: center;
 `;
+
 
 interface Props {
   name: string;

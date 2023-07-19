@@ -1,6 +1,7 @@
 import axios from 'axios';
-const API = process.env.REACT_APP_BET_API
-? process.env.REACT_APP_BET_API
+import { FRIENDLYBETS_BET_API } from '../../secret';
+const API = FRIENDLYBETS_BET_API
+? FRIENDLYBETS_BET_API
 : 'http://192.168.1.5:10101/bet';
 
 export const quitBet = (sendData, accessToken: string) => {

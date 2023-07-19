@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
@@ -48,54 +48,106 @@ const MakeABet3: FunctionComponent = ({navigation, route}) => {
     setDate(currentDate);
   };
 
-  return (
-    <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
-      <Background source={background} />
-      <KeyboardAvoidingContainer>
-        <MainContainer style={{backgroundColor: 'transparent'}}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              width: '100%'
-            }}
-          >
-
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 5, marginBottom: 20}}>
-              When's the last day for someone to cast their bet?
-            </LargeText>  
-
-            <StyledView
-              style={{backgroundColor: colors.tertiary}}
+  // IOS VERSION date/time picker works quite differently between IOS and other OS, that's why we gotta handle them seperatly.
+  if (Platform.OS === 'ios') {
+    return (
+      <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
+        <Background source={background} />
+        <KeyboardAvoidingContainer>
+          <MainContainer style={{backgroundColor: 'transparent'}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                width: '100%'
+              }}
             >
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={'date'}
-                display='inline'
-                onChange={onChange}
-                minimumDate={new Date()}
-              />
-            </StyledView>
-
-            <MessageBox
-              textStyle={{ marginBottom: 20 }}
+  
+              <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 5, marginBottom: 20}}>
+                When's the last day for someone to cast their bet?
+              </LargeText>  
+  
+              <StyledView
+                style={{backgroundColor: colors.tertiary}}
+              >
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={'date'}
+                  display='inline'
+                  onChange={onChange}
+                  minimumDate={new Date()}
+                />
+              </StyledView>
+  
+              <MessageBox
+                textStyle={{ marginBottom: 20 }}
+              >
+                { message || ' ' }
+              </MessageBox>
+              <RegularButton
+                onPress={handleNewBet}
+                style={{marginBottom: 10, backgroundColor: colors.primary}}
+                textStyle={{color: colors.purple, fontSize: 20}}
+              >
+                Next
+              </RegularButton>
+            </View>
+          </MainContainer>
+        </KeyboardAvoidingContainer>
+      </MainContainer>
+    );
+  } else {
+    return (
+      <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
+        <Background source={background} />
+        <KeyboardAvoidingContainer>
+          <MainContainer style={{backgroundColor: 'transparent'}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                width: '100%'
+              }}
             >
-              { message || ' ' }
-            </MessageBox>
-            <RegularButton
-              onPress={handleNewBet}
-              style={{marginBottom: 10, backgroundColor: colors.primary}}
-              textStyle={{color: colors.purple, fontSize: 20}}
-            >
-              Next
-            </RegularButton>
-          </View>
-        </MainContainer>
-      </KeyboardAvoidingContainer>
-    </MainContainer>
-  );
+  
+              <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginTop: 5, marginBottom: 20}}>
+                When's the last day for someone to cast their bet?
+              </LargeText>  
+  
+              <StyledView
+                style={{backgroundColor: colors.tertiary}}
+              >
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  value={date}
+                  mode={'date'}
+                  display='spinner'
+                  onChange={onChange}
+                  minimumDate={new Date()}
+                />
+              </StyledView>
+  
+              <MessageBox
+                textStyle={{ marginBottom: 20 }}
+              >
+                { message || ' ' }
+              </MessageBox>
+              <RegularButton
+                onPress={handleNewBet}
+                style={{marginBottom: 10, backgroundColor: colors.primary}}
+                textStyle={{color: colors.purple, fontSize: 20}}
+              >
+                Next
+              </RegularButton>
+            </View>
+          </MainContainer>
+        </KeyboardAvoidingContainer>
+      </MainContainer>
+    );
+  }
 }
 
 export default MakeABet3;

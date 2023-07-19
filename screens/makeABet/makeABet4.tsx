@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState } from 'react';
 import styled from 'styled-components/native';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 
@@ -57,88 +57,175 @@ const MakeABet4: FunctionComponent = ({navigation, route}) => {
     setDate(currentDate);
   };
 
-  return (
-    <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
-      <Background source={background} />
-      <KeyboardAvoidingContainer>
-        <MainContainer style={{backgroundColor: 'transparent'}}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              width: '100%'
-            }}
-          >
-            
-            <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
-              OK, the last day to make a bet is on
-            </LargeText> 
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 10, textAlign: 'left', width: '100%'}}>
-              {date.toDateString()}
-            </LargeText>  
 
-            <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, backgroundColor: colors.primary, padding: 5}}>
-              At what time?
-            </LargeText>
-
-            
-            <StyledCheckBox
-              isChecked={check}
-              setChecked={() => setCheck(!check)}
-              name={'selfDateResolving'}
-              boxColor={colors.primary}
-              style={{padding: 12}}
+  // IOS VERSION date/time picker works quite differently between IOS and other OS, that's why we gotta handle them seperatly.
+  if (Platform.OS === 'ios') {
+    return (
+      <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
+        <Background source={background} />
+        <KeyboardAvoidingContainer>
+          <MainContainer style={{backgroundColor: 'transparent'}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '100%'
+              }}
             >
-              <RegularText textStyle={{textAlign: 'left', fontWeight: 'bold', fontSize: 24}}>
-                At midnight
-              </RegularText>
-            </StyledCheckBox>
-
-            <StyledView
-              style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width: '80%', marginTop: 10}}
-            >
-
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={date}
-              mode={'time'}
-              display='spinner'
-              is24Hour={true}
-              onChange={onChange}
-              style={{alignSelf: 'center', width: '80%'}}
-              minimumDate={new Date()}
-              disabled={check}
-            />
-
-            </StyledView>
-
-            {message ? 
-              <MessageBox
-                textStyle={{ marginBottom: 20, fontSize: 16, marginTop: 10, backgroundColor: colors.primary }}
+              
+              <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
+                OK, the last day to make a bet is on
+              </LargeText> 
+              <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 10, textAlign: 'left', width: '100%'}}>
+                {date.toDateString()}
+              </LargeText>  
+  
+              <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, backgroundColor: colors.primary, padding: 5}}>
+                At what time?
+              </LargeText>
+  
+              
+              <StyledCheckBox
+                isChecked={check}
+                setChecked={() => setCheck(!check)}
+                name={'selfDateResolving'}
+                boxColor={colors.primary}
+                style={{padding: 12}}
               >
-                {message}
-              </MessageBox>
-            :
-              <MessageBox
-                textStyle={{ marginBottom: 20, fontSize: 16, marginTop: 10 }}
+                <RegularText textStyle={{textAlign: 'left', fontWeight: 'bold', fontSize: 24}}>
+                  At midnight
+                </RegularText>
+              </StyledCheckBox>
+  
+              <StyledView
+                style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width: '80%', marginTop: 10}}
               >
-                { ' ' }
-              </MessageBox>
-            }
-
-            <RegularButton
-              onPress={handleNewBet}
-              style={{marginBottom: 10, backgroundColor: colors.primary}}
-              textStyle={{color: colors.purple, fontSize: 20}}
+  
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={'time'}
+                display='spinner'
+                is24Hour={true}
+                onChange={onChange}
+                style={{alignSelf: 'center', width: '80%'}}
+                minimumDate={new Date()}
+                disabled={check}
+              />
+  
+              </StyledView>
+  
+              {message ? 
+                <MessageBox
+                  textStyle={{ marginBottom: 20, fontSize: 16, marginTop: 10, backgroundColor: colors.primary }}
+                >
+                  {message}
+                </MessageBox>
+              :
+                <MessageBox
+                  textStyle={{ marginBottom: 20, fontSize: 16, marginTop: 10 }}
+                >
+                  { ' ' }
+                </MessageBox>
+              }
+  
+              <RegularButton
+                onPress={handleNewBet}
+                style={{marginBottom: 10, backgroundColor: colors.primary}}
+                textStyle={{color: colors.purple, fontSize: 20}}
+              >
+                Next
+              </RegularButton>
+            </View>
+          </MainContainer>
+        </KeyboardAvoidingContainer>
+      </MainContainer>
+    );
+  } else {
+    return (
+      <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.purple}} >
+        <Background source={background} />
+        <KeyboardAvoidingContainer>
+          <MainContainer style={{backgroundColor: 'transparent'}}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                width: '100%'
+              }}
             >
-              Next
-            </RegularButton>
-          </View>
-        </MainContainer>
-      </KeyboardAvoidingContainer>
-    </MainContainer>
-  );
+              
+              <LargeText textStyle={{color: colors.tertiary, marginTop: 20, textAlign: 'left', width: '100%'}}>
+                OK, the last day to make a bet is on
+              </LargeText> 
+              <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 10, textAlign: 'left', width: '100%'}}>
+                {date.toDateString()}
+              </LargeText>  
+  
+              <LargeText textStyle={{fontWeight: 'bold', color: colors.tertiary, marginBottom: 20, backgroundColor: colors.primary, padding: 5}}>
+                At what time?
+              </LargeText>
+  
+              
+              <StyledCheckBox
+                isChecked={check}
+                setChecked={() => setCheck(!check)}
+                name={'selfDateResolving'}
+                boxColor={colors.primary}
+                style={{padding: 12}}
+              >
+                <RegularText textStyle={{textAlign: 'left', fontWeight: 'bold', fontSize: 24}}>
+                  At midnight
+                </RegularText>
+              </StyledCheckBox>
+  
+              <StyledView
+                style={{backgroundColor: colors.tertiary, display: 'flex', justifyContent: 'center', alignItems: 'center', borderRadius: 5, width: '80%', marginTop: 10}}
+              >
+  
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={'time'}
+                display='spinner'
+                is24Hour={true}
+                onChange={onChange}
+                style={{alignSelf: 'center', width: '80%'}}
+                minimumDate={new Date()}
+              />
+  
+              </StyledView>
+  
+              {message ? 
+                <MessageBox
+                  textStyle={{ marginBottom: 20, fontSize: 16, marginTop: 10, backgroundColor: colors.primary }}
+                >
+                  {message}
+                </MessageBox>
+              :
+                <MessageBox
+                  textStyle={{ marginBottom: 20, fontSize: 16, marginTop: 10 }}
+                >
+                  { ' ' }
+                </MessageBox>
+              }
+  
+              <RegularButton
+                onPress={handleNewBet}
+                style={{marginBottom: 10, backgroundColor: colors.primary}}
+                textStyle={{color: colors.purple, fontSize: 20}}
+              >
+                Next
+              </RegularButton>
+            </View>
+          </MainContainer>
+        </KeyboardAvoidingContainer>
+      </MainContainer>
+    );
+  }
+
 }
 
 export default MakeABet4;
