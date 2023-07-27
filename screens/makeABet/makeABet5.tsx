@@ -1,6 +1,6 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import styled from 'styled-components/native';
-import { View, ActivityIndicator } from 'react-native';
+import { View, ActivityIndicator, Platform } from 'react-native';
 import { Formik } from 'formik';
 
 
@@ -97,7 +97,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               alignItems: 'center',
               width: '100%',
               backgroundColor: colors.tertiary,
-              borderRadius: 30,
+              borderRadius: 10,
             }}
           >
             <View
@@ -111,7 +111,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               <RegularText
                 textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left', fontSize: 20}}
               >
-                "{betData.betTitle.charAt(0).toUpperCase() + betData.betTitle.slice(1)}"
+                {betData.betTitle.charAt(0).toUpperCase() + betData.betTitle.slice(1)}
               </RegularText>
               <RegularText
                 textStyle={{color: colors.primary, textAlign: 'left',}}
@@ -125,7 +125,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               <RegularText
                 textStyle={{color: colors.primary,textAlign: 'left'}}
               >
-                The person(s) who lose must provide the winner : 
+                The person(s) who lose must provide the winner(s) : 
               </RegularText>
               <RegularText
                 textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left', fontSize: 20}}
@@ -135,7 +135,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               <RegularText
                 textStyle={{fontWeight: 'bold', color: colors.primary,textAlign: 'left'}}
               >
-                "{betData.betExplain}"
+                {betData.betExplain}
               </RegularText>
             </View>
             <View
@@ -149,7 +149,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
               <RegularText
                 textStyle={{fontWeight: 'bold', color: colors.primary, textAlign: 'left'}}
               >
-                {new Date(betData.bettingEndAt).toDateString()} at {new Date(betData.bettingEndAt).toLocaleTimeString().slice(0, -3)}
+                {new Date(betData.bettingEndAt).toDateString()} at {Platform.OS === 'ios' ? new Date(betData.bettingEndAt).toLocaleTimeString().slice(0, -3) : new Date(betData.bettingEndAt).toLocaleTimeString().slice(0, -9)}
               </RegularText>
               <RegularText
                 textStyle={{color: colors.primary, textAlign: 'left', marginBottom: 12}}
@@ -181,7 +181,7 @@ const MakeABet5: FunctionComponent = ({navigation, route}) => {
                   }}
                 >
                   <RegularText
-                    textStyle={{fontSize: 20, fontWeight: 700, color: colors.primary, width: 300}}
+                    textStyle={{fontSize: 20, fontWeight: 700, color: colors.tertiary, width: 300}}
                   >
                     Write the outcome you're betting on.
                   </RegularText>

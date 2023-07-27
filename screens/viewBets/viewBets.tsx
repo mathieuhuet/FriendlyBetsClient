@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 
@@ -92,7 +92,7 @@ const ViewBets: FunctionComponent = ({navigation}) => {
                 <RegularText
                   textStyle={{fontWeight: 'bold'}}
                   >
-                    {new Date(bet.bettingEndAt).toDateString()} at {new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3)}
+                    {new Date(bet.bettingEndAt).toDateString()} at {Platform.OS === 'ios' ? new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3) : new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -9)}
                 </RegularText>
                 <ParticipantsIcon
                   betId={bet._id}

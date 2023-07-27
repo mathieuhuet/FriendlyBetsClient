@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from 'react';
-import { View, Pressable, ScrollView } from 'react-native';
+import { View, Pressable, ScrollView, ActivityIndicator } from 'react-native';
 // Styled components
 import ProfileIcon from './profileIcon';
 import { getParticipants } from '../../services/betServices/getParticipants';
@@ -146,7 +146,11 @@ const ParticipantsBetList: FunctionComponent<Props> = (props) => {
           <RegularText
             textStyle={{marginLeft: 10}}
           >
-            {participantsBet.findIndex((el) => el[participant._id]) > -1 ? participantsBet[participantsBet.findIndex((el) => el[participant._id])][participant._id].userBet : 'oups'}
+            {participantsBet.findIndex((el) => el[participant._id]) > -1 ? participantsBet[participantsBet.findIndex((el) => el[participant._id])][participant._id].userBet :           
+            <ActivityIndicator
+              size='small'
+              color={colors.tertiary}
+            />}
           </RegularText>
         </View>
         }

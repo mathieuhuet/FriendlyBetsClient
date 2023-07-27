@@ -46,6 +46,7 @@ const App: FunctionComponent = () => {
           }});
         }).catch((err) => {
           console.log(err, 'APP 2');
+          dispatch({ type: 'SET_ACCESSTOKEN', payload: {accessToken: ''}})
         })
       }
     });

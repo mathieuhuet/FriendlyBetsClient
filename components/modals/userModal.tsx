@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react';
-import { Modal, View } from 'react-native';
+import { Modal, View, Platform } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 // Styled components
 import styled from 'styled-components/native';
@@ -75,7 +75,7 @@ const UserModal: FunctionComponent<Props> = (props) => {
                   </SmallText>
                 }
                 <RegularText>
-                  {new Date(props.joinedAt).toDateString()} at {new Date(props.joinedAt).toLocaleTimeString().slice(0, -3)}
+                  {new Date(props.joinedAt).toDateString()} at {Platform.OS === 'ios' ? new Date(props.joinedAt).toLocaleTimeString().slice(0, -3) : new Date(props.joinedAt).toLocaleTimeString().slice(0, -9)}
                 </RegularText>
               </>
               }

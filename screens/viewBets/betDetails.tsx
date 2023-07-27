@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
-import { View } from 'react-native';
+import { View, Platform } from 'react-native';
 import styled from 'styled-components/native';
 
 
@@ -88,11 +88,11 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
           <RegularText
             textStyle={{fontWeight: 'bold', marginBottom: 20}}
             >
-              {new Date(bet.bettingEndAt).toDateString()} at {new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3)}
+              {new Date(bet.bettingEndAt).toDateString()} at {Platform.OS === 'ios' ? new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3) : new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -9)}
           </RegularText>
 
           <View
-            style={{ marginBottom: 20, display: 'flex', justifyContent: 'center', width: '100%', padding: 10, borderWidth: 10, borderColor: colors.tertiary,}}
+            style={{ marginBottom: 20, width: '100%', padding: 10, borderWidth: 10, borderColor: colors.tertiary,}}
           >
             <LargeText
               textStyle={{
@@ -101,8 +101,6 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
                 fontWeight: 'bold', 
                 letterSpacing: 5, 
                 padding: 10,
-                borderWidth: 10, 
-                borderColor: colors.tertiary,
                 textAlign: 'center'
               }}
             >
@@ -122,9 +120,6 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
         </StyledView>
         {user._id === bet.admin ?
           <>
-            <View
-              style={{position: 'absolute', display: 'flex', justifyContent: 'flex-end', alignContent: 'center', height: '100%', width: '100%'}}
-            >
               <RegularButton
                 style={{backgroundColor: colors.success, marginBottom: 20}}
                 onPress={() => {}}
@@ -139,7 +134,6 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
               >
                 Delete Bet
               </RegularButton>
-            </View>
             <ConfirmModal
               message={modalMessage}
               modalVisible={modalVisible}
@@ -149,13 +143,13 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
           </>
         : 
           <>
-            <RegularButton
-              style={{backgroundColor: colors.orange}}
-              onPress={() => setModalVisible(true)}
-              textStyle={{fontSize: 20}}
-            >
-            Quit Bet
-          </RegularButton>
+              <RegularButton
+                style={{backgroundColor: colors.orange}}
+                onPress={() => setModalVisible(true)}
+                textStyle={{fontSize: 20}}
+              >
+                Quit Bet
+              </RegularButton>
           <ConfirmModal
             message={modalMessage}
             modalVisible={modalVisible}
