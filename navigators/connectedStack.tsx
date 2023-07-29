@@ -13,6 +13,7 @@ import JoinABet from '../screens/joinABet/joinABet';
 import JoinABetConfirm from '../screens/joinABet/joinABetConfirm';
 import ViewBets from '../screens/viewBets/viewBets';
 import BetDetails from '../screens/viewBets/betDetails';
+import ResolveBets from '../screens/viewBets/resolveBets';
 import More from '../screens/more/more';
 import ChangeEmail from '../screens/more/changeEmail';
 import ChangeEmailVerification from '../screens/more/changeEmailVerification';
@@ -74,6 +75,10 @@ const ConnectedStack: FunctionComponent = (props) => {
         <Stack.Screen
           name='BetDetails'
           component={BetDetails}
+        />
+        <Stack.Screen
+          name='ResolveBets'
+          component={ResolveBets}
         />
         <Stack.Screen
           name='More'

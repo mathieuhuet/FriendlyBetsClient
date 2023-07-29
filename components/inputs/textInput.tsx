@@ -22,6 +22,7 @@ const InputField = styled.TextInput`
   shadow-offset: 0px 2px;
   shadow-opacity: 0.25;
   shadow-radius: 4px;
+  elevation: 5;
 `;
 
 

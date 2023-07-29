@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState, useEffect, useContext } from 'react';
 import { View, Platform } from 'react-native';
 import styled from 'styled-components/native';
+import { Entypo } from '@expo/vector-icons';
 
 
 // Custom components
@@ -20,6 +21,7 @@ import ParticipantsIcon from '../../components/icons/participantsIcon';
 import ConfirmModal from '../../components/modals/confirmModal';
 import { getBetOptions } from '../../components/betOptions';
 import ParticipantsBetList from '../../components/icons/participantsBetList';
+import BetDetailsModal from '../../components/modals/betDetailsModal';
 
 
 const Background = styled.Image`
@@ -62,35 +64,58 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
     }
   }
 
+  const resolveBet = () => {
+    setModalVisible(false);
+    if (user._id === bet.admin) {
+      navigation.navigate('ResolveBets', bet);
+    }
+  }
+
   
   return (
     <MainContainer style={{paddingTop: 0, paddingLeft: 0, paddingRight: 0, backgroundColor: colors.accent}} >
       <Background source={background} />
       <MainContainer style={{backgroundColor: 'transparent', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+        <View
+          style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', flex: 1}}
+        >
+          <View>
+            <LargeText textStyle={{marginBottom: 5, color: colors.primary}}>
+              {bet.betTitle}
+            </LargeText>
+            <RegularText textStyle={{marginBottom: 20, color: colors.primary}}>
+              {bet.betExtraText}
+            </RegularText>
+            <RegularText textStyle={{marginBottom: 5, color: colors.primary, fontWeight: 'bold'}}>
+              {getBetOptions(bet.betType)}
+            </RegularText>
+            <RegularText textStyle={{marginBottom: 20, color: colors.primary}}>
+              {bet.betExplain}
+            </RegularText>
+            <RegularText textStyle={{color: colors.primary}}>
+              Betting ends : 
+            </RegularText>
+            <RegularText
+              textStyle={{fontWeight: 'bold', marginBottom: 20, color: colors.primary}}
+              >
+                {new Date(bet.bettingEndAt).toDateString()} at {Platform.OS === 'ios' ? new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3) : new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -9)}
+            </RegularText>
+          </View>
+          <View>
+            <RegularButton
+              onPress={() => setModalVisible(true)}
+            >
+              <Entypo
+                name='menu'
+                size={30}
+                color={colors.primary}
+              />
+            </RegularButton>
+          </View>
+        </View>
         <StyledView
           style={{backgroundColor: colors.primary, padding: 15, borderRadius: 5}}
         >
-          <LargeText textStyle={{marginBottom: 5, color: colors.tertiary}}>
-            {bet.betTitle}
-          </LargeText>
-          <RegularText textStyle={{marginBottom: 20, color: colors.tertiary}}>
-            {bet.betExtraText}
-          </RegularText>
-          <LargeText textStyle={{marginBottom: 5, color: colors.tertiary}}>
-            {getBetOptions(bet.betType)}
-          </LargeText>
-          <RegularText textStyle={{marginBottom: 20, color: colors.tertiary}}>
-            {bet.betExplain}
-          </RegularText>
-          <RegularText>
-            Betting ends : 
-          </RegularText>
-          <RegularText
-            textStyle={{fontWeight: 'bold', marginBottom: 20}}
-            >
-              {new Date(bet.bettingEndAt).toDateString()} at {Platform.OS === 'ios' ? new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -3) : new Date(bet.bettingEndAt).toLocaleTimeString().slice(0, -9)}
-          </RegularText>
-
           <View
             style={{ marginBottom: 20, width: '100%', padding: 10, borderWidth: 10, borderColor: colors.tertiary,}}
           >
@@ -118,46 +143,14 @@ const BetDetails: FunctionComponent = ({navigation, route}) => {
             betCreatedAt={bet.createdAt}
           />
         </StyledView>
-        {user._id === bet.admin ?
-          <>
-              <RegularButton
-                style={{backgroundColor: colors.success, marginBottom: 20}}
-                onPress={() => {}}
-                textStyle={{fontSize: 20}}
-              >
-                Resolve the bet
-              </RegularButton>
-              <RegularButton
-                style={{backgroundColor: colors.orange}}
-                onPress={() => setModalVisible(true)}
-                textStyle={{fontSize: 20}}
-              >
-                Delete Bet
-              </RegularButton>
-            <ConfirmModal
-              message={modalMessage}
-              modalVisible={modalVisible}
-              buttonHandler={deleteBetPress}
-              closeModal={() => setModalVisible(false)}
-            />
-          </>
-        : 
-          <>
-              <RegularButton
-                style={{backgroundColor: colors.orange}}
-                onPress={() => setModalVisible(true)}
-                textStyle={{fontSize: 20}}
-              >
-                Quit Bet
-              </RegularButton>
-          <ConfirmModal
-            message={modalMessage}
-            modalVisible={modalVisible}
-            buttonHandler={quitBetPress}
-            closeModal={() => setModalVisible(false)}
-          />
-          </>
-        }
+        <BetDetailsModal
+          modalVisible={modalVisible}
+          buttonHandler={user._id === bet.admin ? deleteBetPress : quitBetPress}
+          closeModal={() => setModalVisible(false)}
+          admin={user._id === bet.admin}
+          message={modalMessage}
+          resolveButtonHandler={resolveBet}
+        />
       </MainContainer>
     </MainContainer>
   );
