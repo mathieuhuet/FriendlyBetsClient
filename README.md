@@ -12,6 +12,6 @@ afterward your run `npx expo install` and then to run the app you enter the comm
 
 The front-end framework is **React Native** and wouldn't been possible without **Expo**
 
-The back-end server is **Express**
+The back-end server is **Express.JS**
 
 The database is **Mongo DB**
